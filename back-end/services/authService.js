@@ -2,7 +2,7 @@ const BaseService = require('./baseService');
 const { PrismaClient } = require('@prisma/client');
 const Joi = require('joi');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 const prisma = new PrismaClient();
 const logger = require('./logService');
 
@@ -24,18 +24,7 @@ class AuthService extends BaseService {
     }
   }
 
-  generateAccessToken(user) {
-    try {
-      const secretKey = process.env.JWT_SECRET;
-      const expiresIn = process.env.JWT_EXPIRATION || '15m';
-      return jwt.sign({ id: user.id }, secretKey, { expiresIn });
-    } catch (e) {
-      logger.logError(e);
-      throw new Error('Error generating access token');
-    }
-  }
-
-  async authenticate(username, password) {
+  async authenticate(username, password, ip, userAgent) {
     try {
       const user = await this.findByUsername(username);
 
@@ -43,17 +32,40 @@ class AuthService extends BaseService {
         throw new Error('Invalid credentials');
       }
 
-      const accessToken = this.generateAccessToken(user);
+      const sessionToken = uuidv4();
+      const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 2);
 
-      await this.model.update({
-        where: { id: user.id },
-        data: { token: accessToken },
+      await prisma.session.create({
+        data: {
+          userId: user.id,
+          token: sessionToken,
+          expiresAt,
+          ip: ip || null,
+          userAgent: userAgent || null,
+        },
       });
 
-      return { token: accessToken, userId: user.id };
+      return { token: sessionToken, userId: user.id, expiresAt };
     } catch (e) {
       logger.logError(e);
       throw new Error('Error authenticating user');
+    }
+  }
+
+  async validateSession(token) {
+    try {
+      const session = await prisma.session.findUnique({ where: { token } });
+      if (
+        !session ||
+        !session.isValid ||
+        new Date(session.expiresAt) < new Date()
+      ) {
+        throw new Error('Invalid or expired session');
+      }
+      return session;
+    } catch (e) {
+      logger.logError(e);
+      throw new Error('Session validation failed');
     }
   }
 }

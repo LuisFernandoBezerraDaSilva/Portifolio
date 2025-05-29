@@ -1,6 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const jwt = require('jsonwebtoken');
 
 const authenticateToken = async (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
@@ -9,18 +8,20 @@ const authenticateToken = async (req, res, next) => {
   }
 
   try {
-    const secretKey = process.env.JWT_SECRET;
-    const decoded = jwt.verify(token, secretKey);
-
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.id },
+    const session = await prisma.session.findUnique({
+      where: { token },
+      include: { user: true },
     });
 
-    if (!user || user.tokenRevoked) {
+    if (
+      !session ||
+      !session.isValid ||
+      new Date(session.expiresAt) < new Date()
+    ) {
       return res.status(403).json({ message: 'Access denied' });
     }
 
-    req.user = user;
+    req.user = session.user;
     next();
   } catch (err) {
     return res.status(403).json({ message: 'Access denied' });
