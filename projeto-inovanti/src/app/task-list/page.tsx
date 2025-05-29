@@ -1,13 +1,28 @@
 "use client";
-import { useState } from "react";
-import { Container, Typography, List, ListItem, ListItemText, TextField, Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Container, Typography, TextField, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { TaskService } from "../../services/taskService";
+import { Task } from "../../interfaces/task";
 
 export default function TaskList() {
-  const [tasks] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState("");
 
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const service = new TaskService();
+        const data = await service.getAllTasks();
+        setTasks(data);
+      } catch (error) {
+        setTasks([]);
+      }
+    };
+    fetchTasks();
+  }, []);
+
   const filteredTasks = tasks.filter(task =>
-    task.toLowerCase().includes(filter.toLowerCase())
+    task.title.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
@@ -23,13 +38,28 @@ export default function TaskList() {
           fullWidth
         />
       </Box>
-      <List>
-        {filteredTasks.map((task, idx) => (
-          <ListItem key={idx}>
-            <ListItemText primary={task} />
-          </ListItem>
-        ))}
-      </List>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Título</TableCell>
+              <TableCell>Descrição</TableCell>
+              <TableCell>Usuário</TableCell>
+              <TableCell>Data</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredTasks.map((task) => (
+              <TableRow key={task.id}>
+                <TableCell>{task.title}</TableCell>
+                <TableCell>{task.description}</TableCell>
+                <TableCell>{task.userId}</TableCell>
+                <TableCell>{task.date}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Container>
   );
 }

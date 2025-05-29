@@ -1,5 +1,14 @@
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3300";
 
+function getAuthHeaders() {
+  const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 export class BaseService<T> {
   private endpoint: string;
 
@@ -8,13 +17,17 @@ export class BaseService<T> {
   }
 
   async getAll(): Promise<T[]> {
-    const res = await fetch(`${baseUrl}/${this.endpoint}`);
+    const res = await fetch(`${baseUrl}/${this.endpoint}`, {
+      headers: getAuthHeaders(),
+    });
     if (!res.ok) throw new Error("Erro ao buscar dados");
     return res.json();
   }
 
   async get(id: string): Promise<T> {
-    const res = await fetch(`${baseUrl}/${this.endpoint}/${id}`);
+    const res = await fetch(`${baseUrl}/${this.endpoint}/${id}`, {
+      headers: getAuthHeaders(),
+    });
     if (!res.ok) throw new Error("Erro ao buscar item");
     return res.json();
   }
@@ -25,7 +38,7 @@ export class BaseService<T> {
       : `${baseUrl}/${this.endpoint}`;
     const res = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(),
       body: JSON.stringify(item),
     });
     if (!res.ok) throw new Error("Erro ao criar item");
@@ -35,7 +48,7 @@ export class BaseService<T> {
   async update(id: string, item: T): Promise<T> {
     const res = await fetch(`${baseUrl}/${this.endpoint}/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(),
       body: JSON.stringify(item),
     });
     if (!res.ok) throw new Error("Erro ao atualizar item");
@@ -45,6 +58,7 @@ export class BaseService<T> {
   async delete(id: string): Promise<void> {
     const res = await fetch(`${baseUrl}/${this.endpoint}/${id}`, {
       method: "DELETE",
+      headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error("Erro ao deletar item");
   }
