@@ -8,14 +8,28 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
+import { AuthService } from "../services/authService";
+
+const authService = new AuthService();
 
 export default function Home() {
-  const [email, setEmail] = useState("");
+  const [user, setUser] = useState("");
   const [senha, setSenha] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Email: ${email}\nSenha: ${senha}`);
+    setError(null);
+    try {
+      const result = await authService.login({
+        username: user,
+        password: senha,
+      });
+      alert(`Login realizado!\nToken: ${result.token}`);
+      localStorage.setItem("accessToken", result.token);
+    } catch (err: any) {
+      setError("Usuário ou senha inválidos");
+    }
   };
 
   return (
@@ -26,10 +40,10 @@ export default function Home() {
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <TextField
-            label="E-mail"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            label="Usuário"
+            type="text"
+            value={user}
+            onChange={(e) => setUser(e.target.value)}
             required
             fullWidth
           />
@@ -41,6 +55,11 @@ export default function Home() {
             required
             fullWidth
           />
+          {error && (
+            <Typography color="error" align="center">
+              {error}
+            </Typography>
+          )}
           <Button type="submit" variant="contained" color="primary" fullWidth>
             Entrar
           </Button>

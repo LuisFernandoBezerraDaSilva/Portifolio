@@ -1,4 +1,4 @@
-const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3300";
 
 export class BaseService<T> {
   private endpoint: string;
@@ -19,8 +19,11 @@ export class BaseService<T> {
     return res.json();
   }
 
-  async create(item: T): Promise<T> {
-    const res = await fetch(`${baseUrl}/${this.endpoint}`, {
+  async create(item: T, endpoint?: string): Promise<T> {
+    const url = endpoint
+      ? `${baseUrl}/${endpoint}`
+      : `${baseUrl}/${this.endpoint}`;
+    const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(item),
