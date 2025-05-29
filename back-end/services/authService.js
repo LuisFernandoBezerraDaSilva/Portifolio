@@ -40,8 +40,9 @@ class AuthService extends BaseService {
           userId: user.id,
           token: sessionToken,
           expiresAt,
-          ip: ip || null,
+          creationIp: ip || null,
           userAgent: userAgent || null,
+          isValid: true,
         },
       });
 
