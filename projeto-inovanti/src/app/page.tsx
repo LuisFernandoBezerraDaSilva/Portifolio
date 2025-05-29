@@ -8,6 +8,7 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { AuthService } from "../services/authService";
 
 const authService = new AuthService();
@@ -16,6 +17,7 @@ export default function Home() {
   const [user, setUser] = useState("");
   const [senha, setSenha] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,8 +27,8 @@ export default function Home() {
         username: user,
         password: senha,
       });
-      alert(`Login realizado!\nToken: ${result.token}`);
       localStorage.setItem("accessToken", result.token);
+      router.push("/task-list");
     } catch (err: any) {
       setError("Usuário ou senha inválidos");
     }
