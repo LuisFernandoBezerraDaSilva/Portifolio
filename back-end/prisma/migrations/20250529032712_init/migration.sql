@@ -14,7 +14,7 @@ CREATE TABLE "Session" (
     "token" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expiresAt" TIMESTAMP(3) NOT NULL,
-    "ip" TEXT,
+    "creationIp" TEXT,
     "userAgent" TEXT,
     "isValid" BOOLEAN NOT NULL,
 
