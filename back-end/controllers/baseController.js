@@ -4,14 +4,14 @@ class BaseController {
     }
   
     async create(req, res) {
-  try {
-    const data = { ...req.body, userId: req.user.id };
-    const newItem = await this.service.create(data);
-    res.status(201).json(newItem);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-}
+      try {
+        const data = { ...req.body, userId: req.user.id };
+        const newItem = await this.service.create(data);
+        res.status(201).json(newItem);
+      } catch (error) {
+        res.status(400).json({ error: error.message });
+      }
+    }
   
     async getAll(req, res) {
       try {
