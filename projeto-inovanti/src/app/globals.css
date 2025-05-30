@@ -25,6 +25,9 @@
   .MuiContainer-root {
     max-width: 90% !important;
   }
+  .login-container.MuiContainer-root {
+    max-width: 50% !important;
+  }
 }
 
 body {

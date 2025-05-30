@@ -35,7 +35,11 @@ export default function Home() {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}>
+    <Container
+      className="login-container"
+      maxWidth="sm"
+      sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}
+    >
       <Paper elevation={3} sx={{ p: 4, width: "100%" }}>
         <Typography variant="h4" align="center" gutterBottom>
           Login
