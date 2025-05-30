@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Container, Typography, TextField, Button, Box, Paper } from "@mui/material";
 import { TaskService } from "../../services/taskService";
 import { Task } from "../../interfaces/task";
@@ -15,6 +16,27 @@ export default function TaskForm() {
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+
+  useEffect(() => {
+    const fetchTask = async () => {
+      if (id) {
+        try {
+          const data = await taskService.getTask(id);
+          setTask({
+            title: data.title,
+            description: data.description,
+            date: data.date,
+          });
+        } catch (err) {
+          setError("Erro ao carregar tarefa.");
+        }
+      }
+    };
+    fetchTask();
+  }, [id]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
@@ -24,12 +46,18 @@ export default function TaskForm() {
     setError(null);
     setSuccess(null);
     try {
-      // @ts-ignore
-      await taskService.createTask(task);
-      setSuccess("Tarefa criada com sucesso!");
-      setTask({ title: "", description: "", date: "" });
+      if (id) {
+        // @ts-ignore
+        await taskService.updateTask(id, task);
+        setSuccess("Tarefa atualizada com sucesso!");
+      } else {
+        // @ts-ignore
+        await taskService.createTask(task);
+        setSuccess("Tarefa criada com sucesso!");
+        setTask({ title: "", description: "", date: "" });
+      }
     } catch (err) {
-      setError("Erro ao criar tarefa.");
+      setError("Erro ao salvar tarefa.");
     }
   };
 
@@ -37,7 +65,7 @@ export default function TaskForm() {
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
         <Typography variant="h5" gutterBottom>
-          Criar Nova Tarefa
+          {id ? "Editar Tarefa" : "Criar Nova Tarefa"}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <TextField
@@ -64,7 +92,7 @@ export default function TaskForm() {
             required
           />
           <Button type="submit" variant="contained" color="primary">
-            Criar Tarefa
+            {id ? "Salvar Alterações" : "Criar Tarefa"}
           </Button>
           {success && (
             <Typography color="success.main">{success}</Typography>
