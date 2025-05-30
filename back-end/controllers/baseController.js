@@ -5,7 +5,10 @@ class BaseController {
   
     async create(req, res) {
       try {
-        const data = { ...req.body, userId: req.user.id };
+        let data = { ...req.body };
+        if (req.user && req.user.id) {
+          data.userId = req.user.id;
+        }
         const newItem = await this.service.create(data);
         res.status(201).json(newItem);
       } catch (error) {
