@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Container,
@@ -31,13 +31,31 @@ export default function TaskList() {
   const [snackbarMsg, setSnackbarMsg] = useState("");
   const router = useRouter();
 
-  const debouncedFilter = useDebounce(filter, 2000);
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (debouncedFilter !== "") {
+    if (filter === "") return;
+    if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+
+    debounceTimeout.current = setTimeout(() => {
+      console.log("aqui!");
+    }, 2000);
+
+    return () => {
+      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+    };
+  }, [filter]);
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter(e.target.value);
+  };
+
+  const handleFilterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
       console.log("aqui!");
     }
-  }, [debouncedFilter]);
+  };
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -83,7 +101,8 @@ export default function TaskList() {
         <TextField
           label="Filtrar tarefa"
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
+          onChange={handleFilterChange}
+          onKeyDown={handleFilterKeyDown}
           fullWidth
         />
         <Button
