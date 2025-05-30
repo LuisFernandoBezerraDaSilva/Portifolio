@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Container, Typography, TextField, Button, Box, Paper } from "@mui/material";
+import { Container, Typography, TextField, Button, Box, Paper, MenuItem } from "@mui/material";
 import { TaskService } from "../../services/taskService";
 import { Task } from "../../interfaces/task";
 import { BaseComponent } from "../../components/baseComponent";
+import { TaskStatus } from "../../enums/taskStatus";
 
 const taskService = new TaskService();
 
@@ -13,6 +14,7 @@ export default function TaskForm() {
     title: "",
     description: "",
     date: "",
+    status: TaskStatus.A_FAZER,
   });
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -31,6 +33,7 @@ export default function TaskForm() {
             title: data.title,
             description: data.description,
             date: data.date,
+            status: data.status,
           });
         } catch (err) {
           setError("Erro ao carregar tarefa.");
@@ -62,7 +65,7 @@ export default function TaskForm() {
             } else {
               await taskService.createTask(task);
               setSuccess("Tarefa criada com sucesso!");
-              setTask({ title: "", description: "", date: "" });
+              setTask({ title: "", description: "", date: "", status: TaskStatus.A_FAZER });
             }
             setOpenSnackbar(true);
             setTimeout(() => {
@@ -105,6 +108,18 @@ export default function TaskForm() {
                   InputLabelProps={{ shrink: true }}
                   required
                 />
+                <TextField
+                  select
+                  label="Status"
+                  name="status"
+                  value={task.status}
+                  onChange={handleChange}
+                  required
+                >
+                  <MenuItem value={TaskStatus.A_FAZER}>A fazer</MenuItem>
+                  <MenuItem value={TaskStatus.EM_ANDAMENTO}>Em andamento</MenuItem>
+                  <MenuItem value={TaskStatus.CONCLUIDO}>Concluído</MenuItem>
+                </TextField>
                 <Button
                   type="submit"
                   variant="contained"
