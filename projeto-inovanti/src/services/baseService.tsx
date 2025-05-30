@@ -12,14 +12,18 @@ function getAuthHeaders() {
 }
 
 export class BaseService<T> {
-  private endpoint: string;
+  public endpoint: string;
 
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
 
-  async getAll(): Promise<T[]> {
-    const res = await fetchWithAuth(`${baseUrl}/${this.endpoint}`, {
+  async getAll(query?: string): Promise<T[]> {
+    let url = `${baseUrl}/${this.endpoint}`;
+    if (query && query.trim() !== "") {
+      url += `?${query}`;
+    }
+    const res = await fetchWithAuth(url, {
       headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error("Erro ao buscar dados");

@@ -22,7 +22,6 @@ import { formatDateBR } from "../../helpers/formatDateBr";
 import { Task } from "../../interfaces/task";
 import { SnackbarComponent } from "../../components/snackbar";
 import { taskStatusToLabel } from "@/helpers/taskStatusToLabel";
-import { useDebounce } from "@/helpers/useDebounce";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -32,6 +31,21 @@ export default function TaskList() {
   const router = useRouter();
 
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+  const service = new TaskService();
+
+
+  const fetchTasks = async (filterValue: string = "") => {
+    try {
+      const data = await service.getAllTasks(filterValue);
+      setTasks(data);
+    } catch (error) {
+      setTasks([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   useEffect(() => {
     if (filter === "") return;
@@ -39,6 +53,7 @@ export default function TaskList() {
 
     debounceTimeout.current = setTimeout(() => {
       console.log("aqui!");
+      fetchTasks(filter);
     }, 2000);
 
     return () => {
@@ -54,21 +69,9 @@ export default function TaskList() {
     if (e.key === "Enter") {
       if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
       console.log("aqui!");
+      fetchTasks(filter);
     }
   };
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const service = new TaskService();
-        const data = await service.getAllTasks();
-        setTasks(data);
-      } catch (error) {
-        setTasks([]);
-      }
-    };
-    fetchTasks();
-  }, []);
 
   const sortedTasks = [...tasks].sort((a, b) => b.date.localeCompare(a.date));
 
@@ -78,7 +81,6 @@ export default function TaskList() {
 
   const handleDelete = async (id: string) => {
     try {
-      const service = new TaskService();
       await service.deleteTask(id);
       setTasks((prev) => prev.filter((task) => task.id !== id));
       setSnackbarMsg("Tarefa deletada com sucesso!");
