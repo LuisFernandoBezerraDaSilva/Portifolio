@@ -1,3 +1,4 @@
 /node_modules
 /logs/app.log
 .env
+/testeslf-firebase-adminsdk-fbsvc-8ab2d7954a.json
