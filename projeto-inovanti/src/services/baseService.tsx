@@ -1,4 +1,6 @@
+import { fetchWithAuth } from "../helpers/fetchWithAuth";
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3300";
+
 
 function getAuthHeaders() {
   const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
@@ -17,7 +19,7 @@ export class BaseService<T> {
   }
 
   async getAll(): Promise<T[]> {
-    const res = await fetch(`${baseUrl}/${this.endpoint}`, {
+    const res = await fetchWithAuth(`${baseUrl}/${this.endpoint}`, {
       headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error("Erro ao buscar dados");
@@ -25,7 +27,7 @@ export class BaseService<T> {
   }
 
   async get(id: string): Promise<T> {
-    const res = await fetch(`${baseUrl}/${this.endpoint}/${id}`, {
+    const res = await fetchWithAuth(`${baseUrl}/${this.endpoint}/${id}`, {
       headers: getAuthHeaders(),
     });
     if (!res.ok) throw new Error("Erro ao buscar item");
@@ -36,7 +38,7 @@ export class BaseService<T> {
     const url = endpoint
       ? `${baseUrl}/${endpoint}`
       : `${baseUrl}/${this.endpoint}`;
-    const res = await fetch(url, {
+    const res = await fetchWithAuth(url, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify(item),
@@ -46,7 +48,7 @@ export class BaseService<T> {
   }
 
   async update(id: string, item: T): Promise<T> {
-    const res = await fetch(`${baseUrl}/${this.endpoint}/${id}`, {
+    const res = await fetchWithAuth(`${baseUrl}/${this.endpoint}/${id}`, {
       method: "PUT",
       headers: getAuthHeaders(),
       body: JSON.stringify(item),
@@ -56,7 +58,7 @@ export class BaseService<T> {
   }
 
   async delete(id: string): Promise<void> {
-    const res = await fetch(`${baseUrl}/${this.endpoint}/${id}`, {
+    const res = await fetchWithAuth(`${baseUrl}/${this.endpoint}/${id}`, {
       method: "DELETE",
       headers: getAuthHeaders(),
     });

@@ -38,7 +38,7 @@ export default function UserForm() {
             setUser({ username: "", password: "" });
             setOpenSnackbar(true);
             setTimeout(() => {
-              router.push("/user-list");
+              router.push("/");
             }, 1500);
           } catch (err) {
             setError("Erro ao criar usuário.");
