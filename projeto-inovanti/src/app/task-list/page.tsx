@@ -22,6 +22,7 @@ import { formatDateBR } from "../../helpers/formatDateBr";
 import { Task } from "../../interfaces/task";
 import { SnackbarComponent } from "../../components/snackbar";
 import { taskStatusToLabel } from "@/helpers/taskStatusToLabel";
+import { useDebounce } from "@/helpers/useDebounce";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -29,6 +30,14 @@ export default function TaskList() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState("");
   const router = useRouter();
+
+  const debouncedFilter = useDebounce(filter, 2000);
+
+  useEffect(() => {
+    if (debouncedFilter !== "") {
+      console.log("aqui!");
+    }
+  }, [debouncedFilter]);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -44,10 +53,6 @@ export default function TaskList() {
   }, []);
 
   const sortedTasks = [...tasks].sort((a, b) => b.date.localeCompare(a.date));
-
-  const filteredTasks = sortedTasks.filter((task) =>
-    task.title.toLowerCase().includes(filter.toLowerCase())
-  );
 
   const handleEdit = (id: string) => {
     router.push(`/task-form?id=${id}`);
@@ -114,7 +119,7 @@ export default function TaskList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredTasks.map((task) => (
+            {sortedTasks.map((task) => (
               <TableRow key={task.id}>
                 <TableCell>{formatDateBR(task.date)}</TableCell>
                 <TableCell>{task.title}</TableCell>
