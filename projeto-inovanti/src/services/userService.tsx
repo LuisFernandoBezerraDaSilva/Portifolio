@@ -15,7 +15,7 @@ export class UserService extends BaseService<User> {
   }
 
   async createUser(user: User): Promise<User> {
-    return this.create(user);
+    return this.create(user, "auth/register");
   }
 
   async updateUser(id: string, user: User): Promise<User> {

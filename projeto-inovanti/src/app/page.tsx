@@ -44,7 +44,11 @@ export default function Home() {
         <Typography variant="h4" align="center" gutterBottom>
           Login
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
           <TextField
             label="Usuário"
             type="text"
@@ -69,6 +73,19 @@ export default function Home() {
           <Button type="submit" variant="contained" color="primary" fullWidth>
             Entrar
           </Button>
+          <Typography
+            sx={{
+              mt: 2,
+              color: "primary.main",
+              textDecoration: "underline",
+              cursor: "pointer",
+              textAlign: "center",
+              fontWeight: 500,
+            }}
+            onClick={() => router.push("/user-form")}
+          >
+            criar conta!
+          </Typography>
         </Box>
       </Paper>
     </Container>

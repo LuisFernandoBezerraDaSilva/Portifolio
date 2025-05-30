@@ -70,6 +70,7 @@ export default function TaskForm() {
             }, 1500);
           } catch (err) {
             setError("Erro ao salvar tarefa.");
+            setIsSubmitting(false);
             setOpenSnackbar(true);
           }
         };
