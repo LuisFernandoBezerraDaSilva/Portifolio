@@ -100,9 +100,9 @@ export default function TaskForm() {
                   required
                 />
                 <TextField
-                  label="Data"
+                  label="Data e Horário"
                   name="date"
-                  type="date"
+                  type="datetime-local"
                   value={task.date}
                   onChange={handleChange}
                   InputLabelProps={{ shrink: true }}
