@@ -7,18 +7,16 @@ class BaseService {
     this.schema = schema;
   }
 
- async create(data, schema, model, req) {
-    try {
-      data = await this.attachUserIdIfNeeded(data, req);
-
-      this.validate(data, schema ? schema : this.schema);
-      const modelToUse = model ? model : this.model;
-      return await modelToUse.create({ data });
-    } catch (e) {
-      logger.logError(e);
-      throw new Error(`Error creating record for ${this.schema?._type || 'entity'}`);
-    }
+async create(data) {
+  try {
+    this.validate(data, this.schema);
+    if (data.user) delete data.user;
+    return await this.model.create({ data });
+  } catch (e) {
+    logger.logError(e);
+    throw new Error(`Error creating record for ${this.schema?._type || 'entity'}`);
   }
+}
 
   async getAll() {
     try {
@@ -40,20 +38,18 @@ class BaseService {
     }
   }
 
-  async update(id, data, req) {
-    try {
-      data = await this.attachUserIdIfNeeded(data, req);
-
-      this.validate(data, this.schema);
-      return await this.model.update({
-        where: { id: id },
-        data,
-      });
-    } catch (e) {
-      logger.logError(e);
-      throw new Error(`Error editing record for ${this.schema?._type || 'entity'}`);
-    }
+  async update(id, data) {
+  try {
+    this.validate(data, this.schema);
+    return await this.model.update({
+      where: { id: id },
+      data,
+    });
+  } catch (e) {
+    logger.logError(e);
+    throw new Error(`Error editing record for ${this.schema?._type || 'entity'}`);
   }
+}
 
   async delete(id) {
     try {
