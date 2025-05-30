@@ -9,7 +9,7 @@ class TaskService extends BaseService {
     super(prisma.task, taskSchema);
   }
 
-   async getAll(token, filter) {
+  async getAll(token, filter) {
     try {
       const session = await prisma.session.findUnique({
         where: { token },
@@ -25,12 +25,18 @@ class TaskService extends BaseService {
       };
   
       if (filter) {
+        // Monta OR apenas para campos string
         where.OR = [
           { title: { contains: filter, mode: "insensitive" } },
           { description: { contains: filter, mode: "insensitive" } },
-          { status: { contains: filter, mode: "insensitive" } },
           { date: { contains: filter, mode: "insensitive" } },
         ];
+  
+        // Se o filtro for igual a algum status do enum, adiciona no OR
+        const statusValues = ["CONCLUIDO", "EM_ANDAMENTO", "A_FAZER"];
+        if (statusValues.includes(filter.toUpperCase())) {
+          where.OR.push({ status: { equals: filter.toUpperCase() } });
+        }
       }
   
       const tasks = await this.model.findMany({ where });
