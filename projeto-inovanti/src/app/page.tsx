@@ -11,6 +11,9 @@ import {
 import { useRouter } from "next/navigation";
 import { AuthService } from "../services/authService";
 
+import { app, messaging } from "../../firebase";
+import { getToken } from "firebase/messaging";
+
 const authService = new AuthService();
 
 export default function Home() {
@@ -28,6 +31,24 @@ export default function Home() {
         password: senha,
       });
       localStorage.setItem("accessToken", result.token);
+
+      // Registra o service worker e obtém o token do FCM
+      if (typeof window !== "undefined" && "serviceWorker" in navigator && messaging) {
+        try {
+          const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+          const fcmToken = await getToken(messaging, {
+            vapidKey: "BIyRbPvL6m5Om4H78LlCP9EavuCJ9stOTd6z4yrCIXJ-vnKFyRfyBIajdvvZgmLZ2FbF5i1fC_G0IrzRFJJltsU",
+            serviceWorkerRegistration: registration,
+          });
+          if (fcmToken) {
+            // Envie o token para seu backend se necessário
+            console.log("FCM Token:", fcmToken);
+          }
+        } catch (fcmError) {
+          console.error("Erro ao obter token FCM:", fcmError);
+        }
+      }
+
       router.push("/task-list");
     } catch (err: any) {
       setError("Usuário ou senha inválidos");
