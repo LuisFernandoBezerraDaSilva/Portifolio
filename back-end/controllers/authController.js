@@ -15,7 +15,6 @@ class AuthController extends BaseController {
         req.ip,
         req.headers['user-agent']
       );
-      console.log(token, expiresAt);
       res.status(200).json({ token, expiresAt });
     } catch (error) {
       res.status(401).json({ error: 'Unauthorized access' });
