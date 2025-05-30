@@ -1,4 +1,5 @@
 const logger = require('./logService');
+const attachUserIdIfNeeded = require('../helpers/attachUserIdIfNeeded');
 
 class BaseService {
   constructor(model, schema) {
@@ -6,15 +7,17 @@ class BaseService {
     this.schema = schema;
   }
 
-  async create(data, schema, model) {
+ async create(data, schema, model, req) {
     try {
+      data = await this.attachUserIdIfNeeded(data, req);
+
       this.validate(data, schema ? schema : this.schema);
       const modelToUse = model ? model : this.model;
       return await modelToUse.create({ data });
     } catch (e) {
-      logger.logError(e); 
+      logger.logError(e);
       throw new Error(`Error creating record for ${this.schema?._type || 'entity'}`);
-    } 
+    }
   }
 
   async getAll() {
@@ -37,8 +40,10 @@ class BaseService {
     }
   }
 
-  async update(id, data) {
-    try{
+  async update(id, data, req) {
+    try {
+      data = await this.attachUserIdIfNeeded(data, req);
+
       this.validate(data, this.schema);
       return await this.model.update({
         where: { id: id },

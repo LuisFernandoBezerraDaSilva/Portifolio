@@ -1,29 +1,24 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const getUserFromToken = require('../helpers/getUserFromToken');
 
 const authenticateToken = async (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) {
     return res.status(403).json({ message: 'Access denied' });
   }
-
   try {
-    const session = await prisma.session.findUnique({
-      where: { token },
-      include: { user: true },
-    });
+    const user = await getUserFromToken(token);
 
-    if (
-      !session ||
-      !session.isValid ||
-      new Date(session.expiresAt) < new Date()
-    ) {
+    if (!user) {
       return res.status(403).json({ message: 'Access denied' });
     }
 
-    req.user = session.user;
+    req.user = user;
     next();
   } catch (err) {
+      console.log(err)
+
     return res.status(403).json({ message: 'Access denied' });
   }
 };

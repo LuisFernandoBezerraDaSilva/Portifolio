@@ -24,34 +24,34 @@ class AuthService extends BaseService {
     }
   }
 
-  async authenticate(username, password, ip, userAgent) {
-    try {
-      const user = await this.findByUsername(username);
-
-      if (!user || !bcrypt.compareSync(password, user.password)) {
-        throw new Error('Invalid credentials');
+    async authenticate(username, password, ip, userAgent) {
+      try {
+        const user = await this.findByUsername(username);
+  
+        if (!user || !bcrypt.compareSync(password, user.password)) {
+          throw new Error('Invalid credentials');
+        }
+  
+        const sessionToken = uuidv4();
+        const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 2);
+  
+        await prisma.session.create({
+          data: {
+            userId: user.id,
+            token: sessionToken,
+            expiresAt,
+            creationIp: ip || null,
+            userAgent: userAgent || null,
+            isValid: true,
+          },
+        });
+  
+        return { token: sessionToken, expiresAt };
+      } catch (e) {
+        logger.logError(e);
+        throw new Error('Error authenticating user');
       }
-
-      const sessionToken = uuidv4();
-      const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 2);
-
-      await prisma.session.create({
-        data: {
-          userId: user.id,
-          token: sessionToken,
-          expiresAt,
-          creationIp: ip || null,
-          userAgent: userAgent || null,
-          isValid: true,
-        },
-      });
-
-      return { token: sessionToken, userId: user.id, expiresAt };
-    } catch (e) {
-      logger.logError(e);
-      throw new Error('Error authenticating user');
     }
-  }
 
   async validateSession(token) {
     try {
