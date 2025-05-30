@@ -15,6 +15,7 @@ import {
   Paper,
   Button,
   MenuItem,
+  Pagination,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -31,30 +32,40 @@ export default function TaskList() {
   const [status, setStatus] = useState<string>("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
 
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const service = new TaskService();
 
-  const fetchTasks = async (filterValue: string = "", statusValue: string = "") => {
+  const fetchTasks = async (
+    filterValue: string = "",
+    statusValue: string = "",
+    pageValue: number = 1
+  ) => {
     try {
-      const data = await service.getAllTasks(filterValue, statusValue);
-      setTasks(data);
+      const data = await service.getAllTasks(filterValue, statusValue, pageValue, 5);
+      setTasks(data.tasks);
+      setPage(data.page);
+      setTotalPages(data.totalPages);
     } catch (error) {
       setTasks([]);
+      setTotalPages(1);
     }
   };
 
   useEffect(() => {
-    fetchTasks();
-  }, []);
+    fetchTasks(filter, status, page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   useEffect(() => {
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
 
     debounceTimeout.current = setTimeout(() => {
-      console.log("aqui!");
-      fetchTasks(filter, status);
+      setPage(1); 
+      fetchTasks(filter, status, 1);
     }, 2000);
 
     return () => {
@@ -73,8 +84,8 @@ export default function TaskList() {
   const handleFilterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
-      console.log("aqui!");
-      fetchTasks(filter, status);
+      setPage(1);
+      fetchTasks(filter, status, 1);
     }
   };
 
@@ -97,6 +108,10 @@ export default function TaskList() {
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
+  };
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   return (
@@ -204,6 +219,14 @@ export default function TaskList() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Box display="flex" justifyContent="center" mt={2}>
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
+          color="primary"
+        />
+      </Box>
       <SnackbarComponent
         open={openSnackbar}
         message={snackbarMsg}

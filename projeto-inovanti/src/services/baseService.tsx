@@ -18,7 +18,7 @@ export class BaseService<T> {
     this.endpoint = endpoint;
   }
 
-  async getAll(query?: string): Promise<T[]> {
+  async getAll(query?: string): Promise<any> {
     let url = `${baseUrl}/${this.endpoint}`;
     if (query && query.trim() !== "") {
       url += `?${query}`;
