@@ -14,6 +14,7 @@ import {
   TableRow,
   Paper,
   Button,
+  MenuItem,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -22,10 +23,12 @@ import { formatDateBR } from "../../helpers/formatDateBr";
 import { Task } from "../../interfaces/task";
 import { SnackbarComponent } from "../../components/snackbar";
 import { taskStatusToLabel } from "@/helpers/taskStatusToLabel";
+import { TaskStatus } from "@/enums/taskStatus";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState("");
+  const [status, setStatus] = useState<string>("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState("");
   const router = useRouter();
@@ -33,10 +36,9 @@ export default function TaskList() {
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
   const service = new TaskService();
 
-
-  const fetchTasks = async (filterValue: string = "") => {
+  const fetchTasks = async (filterValue: string = "", statusValue: string = "") => {
     try {
-      const data = await service.getAllTasks(filterValue);
+      const data = await service.getAllTasks(filterValue, statusValue);
       setTasks(data);
     } catch (error) {
       setTasks([]);
@@ -48,28 +50,31 @@ export default function TaskList() {
   }, []);
 
   useEffect(() => {
-    if (filter === "") return;
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
 
     debounceTimeout.current = setTimeout(() => {
       console.log("aqui!");
-      fetchTasks(filter);
+      fetchTasks(filter, status);
     }, 2000);
 
     return () => {
       if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
     };
-  }, [filter]);
+  }, [filter, status]);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value);
+  };
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStatus(e.target.value);
   };
 
   const handleFilterKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
       console.log("aqui!");
-      fetchTasks(filter);
+      fetchTasks(filter, status);
     }
   };
 
@@ -107,6 +112,18 @@ export default function TaskList() {
           onKeyDown={handleFilterKeyDown}
           fullWidth
         />
+        <TextField
+          select
+          label="Status"
+          value={status}
+          onChange={handleStatusChange}
+          sx={{ minWidth: 150 }}
+        >
+          <MenuItem value="">Todos</MenuItem>
+          <MenuItem value={TaskStatus.A_FAZER}>A fazer</MenuItem>
+          <MenuItem value={TaskStatus.EM_ANDAMENTO}>Em andamento</MenuItem>
+          <MenuItem value={TaskStatus.CONCLUIDO}>Concluído</MenuItem>
+        </TextField>
         <Button
           variant="contained"
           color="primary"

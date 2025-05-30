@@ -6,10 +6,13 @@ export class TaskService extends BaseService<Task> {
     super("tasks");
   }
 
-  async getAllTasks(filter?: string): Promise<Task[]> {
-  const query = filter && filter.trim() !== "" ? `filter=${encodeURIComponent(filter)}` : "";
-  return this.getAll(query);
-}
+  async getAllTasks(filter?: string, status?: string): Promise<Task[]> {
+    let query: string[] = [];
+    if (filter && filter.trim() !== "") query.push(`filter=${encodeURIComponent(filter)}`);
+    if (status && status.trim() !== "") query.push(`status=${encodeURIComponent(status)}`);
+    const queryString = query.length ? query.join("&") : "";
+    return this.getAll(queryString);
+  }
 
   async getTask(id: string): Promise<Task> {
     return this.get(id);
