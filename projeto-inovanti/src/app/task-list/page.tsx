@@ -18,6 +18,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { TaskService } from "../../services/taskService";
+import { formatDateBR } from "../../helpers/formatDateBr";
 import { Task } from "../../interfaces/task";
 
 export default function TaskList() {
@@ -83,7 +84,6 @@ export default function TaskList() {
             <TableRow>
               <TableCell>Título</TableCell>
               <TableCell>Descrição</TableCell>
-              <TableCell>Usuário</TableCell>
               <TableCell>Data</TableCell>
               <TableCell align="center">Ações</TableCell>
             </TableRow>
@@ -93,8 +93,7 @@ export default function TaskList() {
               <TableRow key={task.id}>
                 <TableCell>{task.title}</TableCell>
                 <TableCell>{task.description}</TableCell>
-                <TableCell>{task.userId}</TableCell>
-                <TableCell>{task.date}</TableCell>
+                <TableCell>{formatDateBR(task.date)}</TableCell>
                 <TableCell align="center">
                   <Button
                     variant="outlined"

@@ -47,11 +47,9 @@ export default function TaskForm() {
     setSuccess(null);
     try {
       if (id) {
-        // @ts-ignore
         await taskService.updateTask(id, task);
         setSuccess("Tarefa atualizada com sucesso!");
       } else {
-        // @ts-ignore
         await taskService.createTask(task);
         setSuccess("Tarefa criada com sucesso!");
         setTask({ title: "", description: "", date: "" });
