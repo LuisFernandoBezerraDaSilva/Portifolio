@@ -21,6 +21,7 @@ import { TaskService } from "../../services/taskService";
 import { formatDateBR } from "../../helpers/formatDateBr";
 import { Task } from "../../interfaces/task";
 import { SnackbarComponent } from "../../components/snackbar";
+import { taskStatusToLabel } from "@/helpers/taskStatusToLabel";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -96,6 +97,7 @@ export default function TaskList() {
               <TableCell>Data</TableCell>
               <TableCell>Título</TableCell>
               <TableCell>Descrição</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell
                 align="center"
                 sx={{
@@ -117,6 +119,7 @@ export default function TaskList() {
                 <TableCell>{formatDateBR(task.date)}</TableCell>
                 <TableCell>{task.title}</TableCell>
                 <TableCell>{task.description}</TableCell>
+                <TableCell>{taskStatusToLabel(task.status)}</TableCell>
                 <TableCell
                   align="center"
                   sx={{
