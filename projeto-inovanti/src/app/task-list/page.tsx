@@ -20,10 +20,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import { TaskService } from "../../services/taskService";
 import { formatDateBR } from "../../helpers/formatDateBr";
 import { Task } from "../../interfaces/task";
+import { SnackbarComponent } from "../../components/snackbar";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMsg, setSnackbarMsg] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -52,9 +55,15 @@ export default function TaskList() {
       const service = new TaskService();
       await service.deleteTask(id);
       setTasks((prev) => prev.filter((task) => task.id !== id));
+      setSnackbarMsg("Tarefa deletada com sucesso!");
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Erro ao deletar tarefa:", error);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -125,6 +134,12 @@ export default function TaskList() {
           </TableBody>
         </Table>
       </TableContainer>
+      <SnackbarComponent
+        open={openSnackbar}
+        message={snackbarMsg}
+        onClose={handleCloseSnackbar}
+        severity="success"
+      />
     </Container>
   );
 }
