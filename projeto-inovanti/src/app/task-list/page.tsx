@@ -42,7 +42,9 @@ export default function TaskList() {
     fetchTasks();
   }, []);
 
-  const filteredTasks = tasks.filter((task) =>
+  const sortedTasks = [...tasks].sort((a, b) => b.date.localeCompare(a.date));
+
+  const filteredTasks = sortedTasks.filter((task) =>
     task.title.toLowerCase().includes(filter.toLowerCase())
   );
 
@@ -91,19 +93,41 @@ export default function TaskList() {
         <Table>
           <TableHead>
             <TableRow>
+              <TableCell>Data</TableCell>
               <TableCell>Título</TableCell>
               <TableCell>Descrição</TableCell>
-              <TableCell>Data</TableCell>
-              <TableCell align="center">Ações</TableCell>
+              <TableCell
+                align="center"
+                sx={{
+                  position: "sticky",
+                  right: 0,
+                  background: "#fff",
+                  zIndex: 1,
+                  minWidth: 120,
+                  maxWidth: 400,
+                }}
+              >
+                Ações
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredTasks.map((task) => (
               <TableRow key={task.id}>
+                <TableCell>{formatDateBR(task.date)}</TableCell>
                 <TableCell>{task.title}</TableCell>
                 <TableCell>{task.description}</TableCell>
-                <TableCell>{formatDateBR(task.date)}</TableCell>
-                <TableCell align="center">
+                <TableCell
+                  align="center"
+                  sx={{
+                    position: "sticky",
+                    right: 0,
+                    background: "#fff",
+                    zIndex: 1,
+                    minWidth: 120,
+                    maxWidth: 400,
+                  }}
+                >
                   <Button
                     variant="outlined"
                     color="primary"
