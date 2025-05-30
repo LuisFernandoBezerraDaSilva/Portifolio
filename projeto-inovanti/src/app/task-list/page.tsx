@@ -1,12 +1,29 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Container, Typography, TextField, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { useRouter } from "next/navigation";
+import {
+  Container,
+  Typography,
+  TextField,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { TaskService } from "../../services/taskService";
 import { Task } from "../../interfaces/task";
 
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -21,9 +38,23 @@ export default function TaskList() {
     fetchTasks();
   }, []);
 
-  const filteredTasks = tasks.filter(task =>
+  const filteredTasks = tasks.filter((task) =>
     task.title.toLowerCase().includes(filter.toLowerCase())
   );
+
+  const handleEdit = (id: string) => {
+    router.push(`/task-form?id=${id}`);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const service = new TaskService();
+      await service.deleteTask(id);
+      setTasks((prev) => prev.filter((task) => task.id !== id));
+    } catch (error) {
+      console.error("Erro ao deletar tarefa:", error);
+    }
+  };
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
@@ -37,6 +68,14 @@ export default function TaskList() {
           onChange={(e) => setFilter(e.target.value)}
           fullWidth
         />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => router.push("/task-form")}
+          sx={{ whiteSpace: "nowrap", height: 56 }}
+        >
+          Nova Tarefa
+        </Button>
       </Box>
       <TableContainer component={Paper}>
         <Table>
@@ -46,6 +85,7 @@ export default function TaskList() {
               <TableCell>Descrição</TableCell>
               <TableCell>Usuário</TableCell>
               <TableCell>Data</TableCell>
+              <TableCell align="center">Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -55,6 +95,32 @@ export default function TaskList() {
                 <TableCell>{task.description}</TableCell>
                 <TableCell>{task.userId}</TableCell>
                 <TableCell>{task.date}</TableCell>
+                <TableCell align="center">
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    startIcon={<EditIcon />}
+                    sx={{ mr: 1 }}
+                    onClick={() => handleEdit(task.id!)}
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={{
+                      backgroundColor: "#d32f2f",
+                      color: "#fff",
+                      "&:hover": { backgroundColor: "#b71c1c" },
+                      minWidth: 0,
+                      padding: "3px",
+                    }}
+                    onClick={() => handleDelete(task.id!)}
+                  >
+                    <DeleteIcon sx={{ color: "#fff" }} />
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
