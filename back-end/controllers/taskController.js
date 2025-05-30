@@ -6,7 +6,7 @@ class TaskController extends BaseController {
     super(service);
   }
 
-  async getAll(req, res) {
+    async getAll(req, res) {
     try {
       const token = req.headers.authorization?.split(' ')[1];
       if (!token) {
@@ -15,11 +15,20 @@ class TaskController extends BaseController {
   
       const filter = req.query.filter || "";
       const status = req.query.status || "";
-      const tasks = await this.service.getAll(token, filter, status);
-      res.status(200).json(tasks);
+      const page = Number.isNaN(parseInt(req.query.page)) ? 1 : parseInt(req.query.page);
+      const limit = Number.isNaN(parseInt(req.query.limit)) ? 10 : parseInt(req.query.limit);
+  
+      const result = await this.service.getAll(token, filter, status, page, limit);
+  
+      res.status(200).json({
+        tasks: result.tasks,
+        total: result.total,
+        page: result.page,
+        totalPages: result.totalPages
+      });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Error fetching users' });
+      res.status(500).json({ error: 'Error fetching tasks' });
     }
   }
 }
