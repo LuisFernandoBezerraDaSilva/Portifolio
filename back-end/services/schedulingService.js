@@ -22,10 +22,11 @@ function schedulingService(task, fcmToken) {
   scheduledJobs.set(task.id, job);
 }
 
-function cancelScheduledTask(taskId) {
-  if (scheduledJobs.has(taskId)) {
-    scheduledJobs.get(taskId).cancel();
-    scheduledJobs.delete(taskId);
+function cancelScheduledTask(id) {
+  const scheduled = scheduledTasks[id];
+  if (scheduled && typeof scheduled.cancel === "function") {
+    scheduled.cancel();
+    delete scheduledTasks[id];
   }
 }
 

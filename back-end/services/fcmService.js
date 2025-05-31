@@ -11,7 +11,11 @@ async function sendNotification(token, notification) {
   return admin.messaging().send({
     token,
     notification,
+    data: {
+      ...notification,
+    },
   });
+
 }
 
 module.exports = { sendNotification };
