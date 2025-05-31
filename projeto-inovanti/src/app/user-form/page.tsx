@@ -42,13 +42,11 @@ export default function UserForm() {
             }, 1500);
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (err: any) {
-            if (
-              err?.response?.data?.message === "Username already exists" ||
-              err?.message === "Username already exists"
-            ) {
-              setError("Usuário já existente, favor trocar de usuário!");
+            console.log(err)
+            if(err.error) {
+              setError("Usuário existente! Favor selecionar outro!");
             } else {
-              setError("Erro ao criar usuário.");
+              setError(err.error)
             }
             setOpenSnackbar(true);
             setIsSubmitting(false);

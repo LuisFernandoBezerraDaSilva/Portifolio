@@ -1,7 +1,6 @@
 import { fetchWithAuth } from "../helpers/fetchWithAuth";
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3300";
 
-
 function getAuthHeaders() {
   const token = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
   const headers: Record<string, string> = { "Content-Type": "application/json" };
@@ -27,7 +26,10 @@ export class BaseService<T> {
     const res = await fetchWithAuth(url, {
       headers: getAuthHeaders(),
     });
-    if (!res.ok) throw new Error("Erro ao buscar dados");
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw { message: "Erro ao buscar dados", ...errorData };
+    }
     return res.json();
   }
 
@@ -35,7 +37,10 @@ export class BaseService<T> {
     const res = await fetchWithAuth(`${baseUrl}/${this.endpoint}/${id}`, {
       headers: getAuthHeaders(),
     });
-    if (!res.ok) throw new Error("Erro ao buscar item");
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw { message: "Erro ao buscar item", ...errorData };
+    }
     return res.json();
   }
 
@@ -48,7 +53,10 @@ export class BaseService<T> {
       headers: getAuthHeaders(),
       body: JSON.stringify(item),
     });
-    if (!res.ok) throw new Error("Erro ao criar item");
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw { message: "Erro ao criar item", ...errorData };
+    }
     return res.json();
   }
 
@@ -58,7 +66,10 @@ export class BaseService<T> {
       headers: getAuthHeaders(),
       body: JSON.stringify(item),
     });
-    if (!res.ok) throw new Error("Erro ao atualizar item");
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw { message: "Erro ao atualizar item", ...errorData };
+    }
     return res.json();
   }
 
@@ -67,6 +78,9 @@ export class BaseService<T> {
       method: "DELETE",
       headers: getAuthHeaders(),
     });
-    if (!res.ok) throw new Error("Erro ao deletar item");
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw { message: "Erro ao deletar item", ...errorData };
+    }
   }
 }

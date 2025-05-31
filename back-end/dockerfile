@@ -12,4 +12,4 @@ RUN npx prisma generate --schema=prisma/schema.prisma
 
 EXPOSE 3300
 
-CMD ["sh", "-c", "npx prisma migrate reset --force && npm run seed && npm start"]
+CMD ["sh", "-c", "npx prisma migrate reset --force && npm start"]
