@@ -13,7 +13,9 @@ services:
       - ./back-end:/app
       - /app/node_modules
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    restart: always
 
   frontend:
     build:
@@ -29,6 +31,7 @@ services:
     command: npm run dev
     depends_on:
       - backend
+    restart: always
 
   db:
     image: postgres:17
@@ -40,6 +43,12 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
 
 volumes:
   postgres_data:
