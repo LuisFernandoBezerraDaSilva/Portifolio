@@ -40,8 +40,15 @@ export default function UserForm() {
             setTimeout(() => {
               router.push("/");
             }, 1500);
-          } catch {
-            setError("Erro ao criar usuário.");
+          } catch (err: any) {
+            if (
+              err?.response?.data?.message === "Username already exists" ||
+              err?.message === "Username already exists"
+            ) {
+              setError("Usuário já existente, favor trocar de usuário!");
+            } else {
+              setError("Erro ao criar usuário.");
+            }
             setOpenSnackbar(true);
             setIsSubmitting(false);
           }
@@ -53,7 +60,11 @@ export default function UserForm() {
               <Typography variant="h5" gutterBottom>
                 Criar Novo Usuário
               </Typography>
-              <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+              >
                 <TextField
                   label="Usuário"
                   name="username"
@@ -69,7 +80,12 @@ export default function UserForm() {
                   onChange={handleChange}
                   required
                 />
-                <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  disabled={isSubmitting}
+                >
                   Criar Usuário
                 </Button>
               </Box>
