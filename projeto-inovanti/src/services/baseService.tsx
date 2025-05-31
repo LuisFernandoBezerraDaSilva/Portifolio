@@ -18,6 +18,7 @@ export class BaseService<T> {
     this.endpoint = endpoint;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getAll(query?: string): Promise<any> {
     let url = `${baseUrl}/${this.endpoint}`;
     if (query && query.trim() !== "") {

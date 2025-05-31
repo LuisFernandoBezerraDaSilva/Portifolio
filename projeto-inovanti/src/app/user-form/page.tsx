@@ -22,7 +22,7 @@ export default function UserForm() {
       snackbarMessage={success || error}
       snackbarSeverity={success ? "success" : "error"}
     >
-      {({ openSnackbar, setOpenSnackbar, handleOpenSnackbar, handleCloseSnackbar }) => {
+      {({ setOpenSnackbar }) => {
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           setUser({ ...user, [e.target.name]: e.target.value });
         };
@@ -40,7 +40,7 @@ export default function UserForm() {
             setTimeout(() => {
               router.push("/");
             }, 1500);
-          } catch (err) {
+          } catch {
             setError("Erro ao criar usuário.");
             setOpenSnackbar(true);
             setIsSubmitting(false);

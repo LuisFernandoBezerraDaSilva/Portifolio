@@ -11,7 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { AuthService } from "../services/authService";
 
-import { app, messaging } from "../../firebase";
+import { messaging } from "../../firebase";
 import { getToken } from "firebase/messaging";
 
 const authService = new AuthService();
@@ -54,7 +54,7 @@ export default function Home() {
     });
     localStorage.setItem("accessToken", result.token);
     router.push("/task-list");
-  } catch (err: any) {
+  } catch  {
     setError("Usuário ou senha inválidos");
   }
 };

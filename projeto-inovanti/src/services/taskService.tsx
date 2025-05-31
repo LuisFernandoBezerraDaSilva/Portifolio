@@ -13,7 +13,7 @@ export class TaskService extends BaseService<Task> {
     page: number = 1,
     limit: number = 5
   ): Promise<TaskListResponse> {
-    let query: string[] = [];
+    const query: string[] = [];
     if (filter && filter.trim() !== "") query.push(`filter=${encodeURIComponent(filter)}`);
     if (status && status.trim() !== "") query.push(`status=${encodeURIComponent(status)}`);
     if (page) query.push(`page=${page}`);

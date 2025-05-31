@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   Container,
@@ -26,6 +26,10 @@ import { SnackbarComponent } from "../../components/snackbar";
 import { taskStatusToLabel } from "@/helpers/taskStatusToLabel";
 import { TaskStatus } from "@/enums/taskStatus";
 
+const service = new TaskService();
+
+
+
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState("");
@@ -37,41 +41,47 @@ export default function TaskList() {
   const router = useRouter();
 
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
-  const service = new TaskService();
 
-  const fetchTasks = async (
-    filterValue: string = "",
-    statusValue: string = "",
-    pageValue: number = 1
-  ) => {
-    try {
-      const data = await service.getAllTasks(filterValue, statusValue, pageValue, 5);
-      setTasks(data.tasks);
-      setPage(data.page);
-      setTotalPages(data.totalPages);
-    } catch (error) {
-      setTasks([]);
-      setTotalPages(1);
-    }
-  };
+  const fetchTasks = useCallback(
+    async (
+      filterValue: string = "",
+      statusValue: string = "",
+      pageValue: number = 1
+    ) => {
+      try {
+        const data = await service.getAllTasks(
+          filterValue,
+          statusValue,
+          pageValue,
+          5
+        );
+        setTasks(data.tasks);
+        setPage(data.page);
+        setTotalPages(data.totalPages);
+      } catch {
+        setTasks([]);
+        setTotalPages(1);
+      }
+    },
+    [service]
+  );
 
   useEffect(() => {
     fetchTasks(filter, status, page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page, filter, status, fetchTasks]);
 
   useEffect(() => {
     if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
 
     debounceTimeout.current = setTimeout(() => {
-      setPage(1); 
+      setPage(1);
       fetchTasks(filter, status, 1);
     }, 2000);
 
     return () => {
       if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
     };
-  }, [filter, status]);
+  }, [filter, status, fetchTasks]);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value);
