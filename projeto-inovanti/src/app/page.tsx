@@ -32,7 +32,6 @@ export default function Home() {
             serviceWorkerRegistration: registration,
           });
           if (fcmToken) {
-            console.log("FCM Token:", fcmToken);
             localStorage.setItem("fcmToken", fcmToken);
           }
         } catch (fcmError) {

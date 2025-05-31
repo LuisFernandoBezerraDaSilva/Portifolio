@@ -13,7 +13,6 @@ function schedulingService(task, fcmToken) {
     scheduledJobs.delete(task.id);
   }
   const job = schedule.scheduleJob(date, () => {
-    console.log('essa parte deu boa!');
     sendNotification(fcmToken, {
       title: "Lembrete de tarefa",
       body: `Tarefa: ${task.title}\n${task.description}`,

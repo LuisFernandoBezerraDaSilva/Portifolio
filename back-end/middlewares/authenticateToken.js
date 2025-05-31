@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const getUserFromToken = require('../helpers/getUserFromToken');
+const logger = require('../services/logService');
 
 const authenticateToken = async (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
@@ -17,7 +18,7 @@ const authenticateToken = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-      console.log(err)
+      logger.logError(err);
 
     return res.status(403).json({ message: 'Access denied' });
   }
