@@ -28,8 +28,6 @@ import { TaskStatus } from "@/enums/taskStatus";
 
 const service = new TaskService();
 
-
-
 export default function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState("");
@@ -182,50 +180,58 @@ export default function TaskList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedTasks.map((task) => (
-              <TableRow key={task.id}>
-                <TableCell>{formatDateBR(task.date)}</TableCell>
-                <TableCell>{task.title}</TableCell>
-                <TableCell>{task.description}</TableCell>
-                <TableCell>{taskStatusToLabel(task.status)}</TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    position: "sticky",
-                    right: 0,
-                    background: "#fff",
-                    zIndex: 1,
-                    minWidth: 120,
-                    maxWidth: 400,
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    startIcon={<EditIcon />}
-                    sx={{ mr: 1 }}
-                    onClick={() => handleEdit(task.id!)}
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      backgroundColor: "#d32f2f",
-                      color: "#fff",
-                      "&:hover": { backgroundColor: "#b71c1c" },
-                      minWidth: 0,
-                      padding: "3px",
-                    }}
-                    onClick={() => handleDelete(task.id!)}
-                  >
-                    <DeleteIcon sx={{ color: "#fff" }} />
-                  </Button>
+            {sortedTasks.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  Não há registros à serem mostrados!
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              sortedTasks.map((task) => (
+                <TableRow key={task.id}>
+                  <TableCell>{formatDateBR(task.date)}</TableCell>
+                  <TableCell>{task.title}</TableCell>
+                  <TableCell>{task.description}</TableCell>
+                  <TableCell>{taskStatusToLabel(task.status)}</TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      position: "sticky",
+                      right: 0,
+                      background: "#fff",
+                      zIndex: 1,
+                      minWidth: 120,
+                      maxWidth: 400,
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      startIcon={<EditIcon />}
+                      sx={{ mr: 1 }}
+                      onClick={() => handleEdit(task.id!)}
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        backgroundColor: "#d32f2f",
+                        color: "#fff",
+                        "&:hover": { backgroundColor: "#b71c1c" },
+                        minWidth: 0,
+                        padding: "3px",
+                      }}
+                      onClick={() => handleDelete(task.id!)}
+                    >
+                      <DeleteIcon sx={{ color: "#fff" }} />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>
