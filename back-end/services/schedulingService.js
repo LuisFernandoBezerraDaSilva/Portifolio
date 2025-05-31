@@ -8,6 +8,8 @@ const scheduledJobs = new Map();
 function schedulingService(task, fcmToken) {
   let date = new Date(task.date);
 
+  date.setHours(date.getHours() + 3);
+
   if (scheduledJobs.has(task.id)) {
     scheduledJobs.get(task.id).cancel();
     scheduledJobs.delete(task.id);
