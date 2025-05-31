@@ -34,6 +34,12 @@ class AuthService extends BaseService {
   
       const sessionToken = uuidv4();
       const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 2);
+
+      if (fcmToken) {
+        await prisma.session.deleteMany({
+          where: { fcmToken }
+        });
+      }
   
       await prisma.session.create({
         data: {
