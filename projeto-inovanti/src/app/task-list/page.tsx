@@ -98,7 +98,7 @@ export default function TaskList() {
   const handleDelete = async (id: string) => {
     try {
       await service.deleteTask(id);
-      setTasks((prev) => prev.filter((task) => task.id !== id));
+      await fetchTasks(filter, status, page);
       setSnackbarMsg("Tarefa deletada com sucesso!");
       setOpenSnackbar(true);
     } catch (error) {
