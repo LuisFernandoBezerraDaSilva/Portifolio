@@ -1,7 +1,7 @@
 Para executar esse software, você precisará do docker baixado na url: https://www.docker.com/products/docker-desktop/
 
 abra o CMD dentro da página do projeto (logo após abrir "desafio tecnico inovanti"), então rode o codigo:
-docker compose up --build
+```docker compose up --build```
 
 versão publicada: **https://sophts.shop**
 
