@@ -1,0 +1,44 @@
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+const schedule = require('node-schedule');
+const { sendNotification } = require('./fcmService');
+
+const scheduledJobs = new Map();
+
+function schedulingService(task, fcmToken) {
+  let date = new Date(task.date);
+
+  if (scheduledJobs.has(task.id)) {
+    scheduledJobs.get(task.id).cancel();
+    scheduledJobs.delete(task.id);
+  }
+  const job = schedule.scheduleJob(date, () => {
+    console.log('essa parte deu boa!');
+    sendNotification(fcmToken, {
+      title: "Lembrete de tarefa",
+      body: `Tarefa: ${task.title}\n${task.description}`,
+    });
+    scheduledJobs.delete(task.id);
+  });
+  scheduledJobs.set(task.id, job);
+}
+
+function cancelScheduledTask(taskId) {
+  if (scheduledJobs.has(taskId)) {
+    scheduledJobs.get(taskId).cancel();
+    scheduledJobs.delete(taskId);
+  }
+}
+
+async function scheduleUserTasks(userId, fcmToken) {
+  const now = new Date();
+  const tasks = await prisma.task.findMany({
+    where: {
+      userId: userId,
+      date: { gt: now.toISOString().slice(0, 16) },
+    },
+  });
+  tasks.forEach(task => schedulingService(task, fcmToken));
+}
+
+module.exports = { schedulingService, cancelScheduledTask, scheduleUserTasks };

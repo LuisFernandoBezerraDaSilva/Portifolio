@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const prisma = new PrismaClient();
 const logger = require('./logService');
+const { schedulingService, scheduleUserTasks } = require('./schedulingService');
 
 class AuthService extends BaseService {
   constructor() {
@@ -27,11 +28,11 @@ class AuthService extends BaseService {
   async authenticate(username, password, ip, userAgent, fcmToken) {
     try {
       const user = await this.findByUsername(username);
-  
+
       if (!user || !bcrypt.compareSync(password, user.password)) {
         throw new Error('Invalid credentials');
       }
-  
+
       const sessionToken = uuidv4();
       const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 2);
 
@@ -40,7 +41,7 @@ class AuthService extends BaseService {
           where: { fcmToken }
         });
       }
-  
+
       await prisma.session.create({
         data: {
           userId: user.id,
@@ -52,13 +53,17 @@ class AuthService extends BaseService {
           fcmToken: fcmToken || null,
         },
       });
-  
+
+      if (user && fcmToken) {
+        await scheduleUserTasks(user.id, fcmToken);
+      }
+
       return { token: sessionToken, expiresAt };
     } catch (e) {
       logger.logError(e);
       throw new Error('Error authenticating user');
     }
-  }
+  }  
 
   async validateSession(token) {
     try {
