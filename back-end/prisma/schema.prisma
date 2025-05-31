@@ -28,6 +28,7 @@ model Session {
   creationIp String?
   userAgent  String?
   isValid    Boolean
+  fcmToken   String?
 }
 
 enum TaskStatus {

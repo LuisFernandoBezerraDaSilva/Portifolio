@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -22,17 +22,8 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    try {
-      const result = await authService.login({
-        username: user,
-        password: senha,
-      });
-      localStorage.setItem("accessToken", result.token);
-
-      // Registra o service worker e obtém o token do FCM
+  useEffect(() => {
+    async function registerAndGetToken() {
       if (typeof window !== "undefined" && "serviceWorker" in navigator && messaging) {
         try {
           const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
@@ -41,19 +32,33 @@ export default function Home() {
             serviceWorkerRegistration: registration,
           });
           if (fcmToken) {
-            // Envie o token para seu backend se necessário
             console.log("FCM Token:", fcmToken);
+            localStorage.setItem("fcmToken", fcmToken);
           }
         } catch (fcmError) {
           console.error("Erro ao obter token FCM:", fcmError);
         }
       }
-
-      router.push("/task-list");
-    } catch (err: any) {
-      setError("Usuário ou senha inválidos");
     }
-  };
+    registerAndGetToken();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError(null);
+  try {
+    const fcmToken = localStorage.getItem("fcmToken");
+    const result = await authService.login({
+      username: user,
+      password: senha,
+      fcmToken: fcmToken || undefined,
+    });
+    localStorage.setItem("accessToken", result.token);
+    router.push("/task-list");
+  } catch (err: any) {
+    setError("Usuário ou senha inválidos");
+  }
+};
 
   return (
     <Container
