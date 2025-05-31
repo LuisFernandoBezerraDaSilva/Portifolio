@@ -40,6 +40,7 @@ export default function UserForm() {
             setTimeout(() => {
               router.push("/");
             }, 1500);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (err: any) {
             if (
               err?.response?.data?.message === "Username already exists" ||
