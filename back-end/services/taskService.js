@@ -1,7 +1,6 @@
 const BaseService = require('./baseService');
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('../prisma/prisma');
 const taskSchema = require('../schemas/taskSchema');
-const prisma = new PrismaClient();
 const logger = require('./logService');
 const parseDateFilter = require('../helpers/parseDateFilter');
 const { schedulingService, cancelScheduledTask } = require('./schedulingService');

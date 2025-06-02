@@ -1,5 +1,5 @@
 const logger = require('./logService');
-const attachUserIdIfNeeded = require('../helpers/attachUserIdIfNeeded');
+
 
 class BaseService {
   constructor(model, schema) {

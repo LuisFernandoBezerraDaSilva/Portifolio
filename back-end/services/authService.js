@@ -1,11 +1,10 @@
 const BaseService = require('./baseService');
-const { PrismaClient } = require('@prisma/client');
+const prisma = require('../prisma/prisma');
 const Joi = require('joi');
 const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
-const prisma = new PrismaClient();
 const logger = require('./logService');
-const { schedulingService, scheduleUserTasks } = require('./schedulingService');
+const { scheduleUserTasks } = require('./schedulingService');
 
 class AuthService extends BaseService {
   constructor() {
@@ -63,7 +62,7 @@ class AuthService extends BaseService {
       logger.logError(e);
       throw new Error('Error authenticating user');
     }
-  }  
+  }
 
   async validateSession(token) {
     try {
