@@ -6,7 +6,7 @@ class AuthController extends BaseController {
     super(service);
   }
 
-    async login(req, res) {
+  async login(req, res) {
     const { username, password, fcmToken } = req.body;
     try {
       const { token, expiresAt } = await this.service.authenticate(
@@ -24,4 +24,7 @@ class AuthController extends BaseController {
 }
 
 const authService = new AuthService();
-module.exports = new AuthController(authService);
+module.exports = {
+  AuthController,
+  authController: new AuthController(authService),
+};
