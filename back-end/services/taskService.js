@@ -98,15 +98,14 @@ class TaskService extends BaseService {
   }
 
   async deleteTask(id) {
-    try {
-      // Cancela o agendamento antes de deletar
-      cancelScheduledTask(id);
-      return this.model.delete({ where: { id } });
-    } catch (e) {
-      logger.logError(e);
-      throw new Error('Error deleting task');
-    }
+  try {
+    cancelScheduledTask(id);
+    return await this.model.delete({ where: { id } }); 
+  } catch (e) {
+    logger.logError(e);
+    throw new Error('Error deleting task');
   }
+}
 }
 
 module.exports = TaskService;
