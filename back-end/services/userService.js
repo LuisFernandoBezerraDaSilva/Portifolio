@@ -44,6 +44,9 @@ class UserService extends BaseService {
       return user;
     } catch (e) {
       logger.logError(e);
+      if (e.message === 'User not found') {
+        throw e; 
+      }
       throw new Error('Error getting user');
     }
   }
