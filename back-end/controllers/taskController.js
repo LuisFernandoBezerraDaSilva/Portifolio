@@ -1,8 +1,5 @@
 const BaseController = require('./baseController');
 const TaskService = require('../services/taskService');
-const AuthService = require('../services/authService');
-
-const authService = new AuthService();
 
 class TaskController extends BaseController {
   constructor(service) {
@@ -11,17 +8,12 @@ class TaskController extends BaseController {
 
   async getAll(req, res) {
     try {
-      const token = req.headers.authorization?.split(' ')[1];
-      if (!token) {
-        return res.status(401).json({ error: 'Token missing' });
-      }
-
       const filter = req.query.filter || "";
       const status = req.query.status || "";
       const page = Number.isNaN(parseInt(req.query.page)) ? 1 : parseInt(req.query.page);
       const limit = Number.isNaN(parseInt(req.query.limit)) ? 10 : parseInt(req.query.limit);
 
-      const result = await this.service.getAll(token, filter, status, page, limit);
+      const result = await this.service.getAll(req.user, filter, status, page, limit);
 
       res.status(200).json({
         tasks: result.tasks,
@@ -37,13 +29,8 @@ class TaskController extends BaseController {
 
   async create(req, res) {
     try {
-      const token = req.headers.authorization?.split(' ')[1];
-      if (!token) {
-        return res.status(401).json({ error: 'Token missing' });
-      }
-      const session = await authService.validateSession(token);
-      const fcmToken = session.fcmToken;
-      const data = { ...req.body, userId: session.userId };
+      const fcmToken = req.user.fcmToken;
+      const data = { ...req.body, userId: req.user.id };
       const task = await this.service.createTask(data, fcmToken);
       res.status(201).json(task);
     } catch (error) {
@@ -54,12 +41,7 @@ class TaskController extends BaseController {
 
   async update(req, res) {
     try {
-      const token = req.headers.authorization?.split(' ')[1];
-      if (!token) {
-        return res.status(401).json({ error: 'Token missing' });
-      }
-      const session = await authService.validateSession(token);
-      const fcmToken = session.fcmToken;
+      const fcmToken = req.user.fcmToken;
       const id = req.params.id;
       const data = req.body;
       const task = await this.service.updateTask(id, data, fcmToken);
@@ -72,4 +54,7 @@ class TaskController extends BaseController {
 }
 
 const taskService = new TaskService();
-module.exports = new TaskController(taskService);
+module.exports = {
+  TaskController,
+  taskController: new TaskController(taskService),
+};
