@@ -1,4 +1,4 @@
-const parseDateFilter = require('../../helpers/parseDateFilter');
+const parseDateFilter = require('../../../helpers/parseDateFilter');
 
 describe('parseDateFilter', () => {
   it('should parse full date dd/mm/yyyy', () => {

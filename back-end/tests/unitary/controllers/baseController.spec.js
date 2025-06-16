@@ -1,4 +1,4 @@
-const BaseController = require('../../controllers/baseController');
+const BaseController = require('../../../controllers/baseController');
 
 describe('BaseController', () => {
   let service;

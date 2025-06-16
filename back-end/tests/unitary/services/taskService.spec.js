@@ -1,9 +1,9 @@
-const TaskService = require('../../services/taskService');
-const prisma = require('../../prisma/prisma');
-const logger = require('../../services/logService');
-const { schedulingService, cancelScheduledTask } = require('../../services/schedulingService');
+const TaskService = require('../../../services/taskService');
+const prisma = require('../../../prisma/prisma');
+const logger = require('../../../services/logService');
+const { schedulingService, cancelScheduledTask } = require('../../../services/schedulingService');
 
-jest.mock('../../prisma/prisma', () => ({
+jest.mock('../../../prisma/prisma', () => ({
   task: {
     findMany: jest.fn(),
     count: jest.fn(),
@@ -15,15 +15,15 @@ jest.mock('../../prisma/prisma', () => ({
     findUnique: jest.fn(),
   },
 }));
-jest.mock('../../services/logService', () => ({
+jest.mock('../../../services/logService', () => ({
   logError: jest.fn(),
 }));
-jest.mock('../../services/schedulingService', () => ({
+jest.mock('../../../services/schedulingService', () => ({
   schedulingService: jest.fn(),
   cancelScheduledTask: jest.fn(),
 }));
-jest.mock('../../schemas/taskSchema', () => ({}));
-jest.mock('../../helpers/parseDateFilter', () => jest.fn(() => null));
+jest.mock('../../../schemas/taskSchema', () => ({}));
+jest.mock('../../../helpers/parseDateFilter', () => jest.fn(() => null));
 
 describe('TaskService', () => {
   let service;

@@ -1,7 +1,7 @@
-const attachUserIdIfNeeded = require('../../helpers/attachUserIdIfNeeded');
-const getUserFromToken = require('../../helpers/getUserFromToken');
+const attachUserIdIfNeeded = require('../../../helpers/attachUserIdIfNeeded');
+const getUserFromToken = require('../../../helpers/getUserFromToken');
 
-jest.mock('../../helpers/getUserFromToken');
+jest.mock('../../../helpers/getUserFromToken');
 
 describe('attachUserIdIfNeeded', () => {
   let model;

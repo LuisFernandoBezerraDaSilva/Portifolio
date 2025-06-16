@@ -1,4 +1,4 @@
-const getUserFromToken = require('../../helpers/getUserFromToken');
+const getUserFromToken = require('../../../helpers/getUserFromToken');
 const { PrismaClient } = require('@prisma/client');
 
 jest.mock('@prisma/client', () => {

@@ -1,4 +1,4 @@
-const BaseService = require('../../services/baseService');
+const BaseService = require('../../../services/baseService');
 
 const mockModel = {
   create: jest.fn(),
@@ -12,7 +12,7 @@ const mockSchema = {
   _type: 'testEntity'
 };
 
-jest.mock('../../services/logService', () => ({
+jest.mock('../../../services/logService', () => ({
   logError: jest.fn(),
 }));
 

@@ -1,7 +1,7 @@
-const AuthService = require('../../services/authService');
+const AuthService = require('../../../services/authService');
 const bcrypt = require('bcryptjs');
 
-jest.mock('../../prisma/prisma', () => ({
+jest.mock('../../../prisma/prisma', () => ({
   user: {
     findUnique: jest.fn(),
   },
@@ -11,15 +11,15 @@ jest.mock('../../prisma/prisma', () => ({
     findUnique: jest.fn(),
   },
 }));
-jest.mock('../../services/logService', () => ({
+jest.mock('../../../services/logService', () => ({
   logError: jest.fn(),
 }));
-jest.mock('../../services/schedulingService', () => ({
+jest.mock('../../../services/schedulingService', () => ({
   scheduleUserTasks: jest.fn(),
 }));
 
-const prisma = require('../../prisma/prisma');
-const { scheduleUserTasks } = require('../../services/schedulingService');
+const prisma = require('../../../prisma/prisma');
+const { scheduleUserTasks } = require('../../../services/schedulingService');
 
 describe('AuthService', () => {
   let service;

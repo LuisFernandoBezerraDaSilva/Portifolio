@@ -15,7 +15,7 @@ describe("fcmService", () => {
   });
 
   it("should send notification using firebase-admin", async () => {
-    const { sendNotification } = require("../../services/fcmService");
+    const { sendNotification } = require("../../../services/fcmService");
     const token = "fake-token";
     const notification = { title: "Test", body: "Test body" };
     const result = await sendNotification(token, notification);
@@ -26,7 +26,7 @@ describe("fcmService", () => {
     jest.resetModules();
     const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
     jest.doMock(
-      "../../services/fcmService",
+      "../../../services/fcmService",
       () => {
         return {
           sendNotification: async () => {
@@ -37,7 +37,7 @@ describe("fcmService", () => {
       },
       { virtual: true }
     );
-    const { sendNotification } = require("../../services/fcmService");
+    const { sendNotification } = require("../../../services/fcmService");
     const result = await sendNotification("token", { title: "t", body: "b" });
     expect(result).toBeNull();
     warnSpy.mockRestore();

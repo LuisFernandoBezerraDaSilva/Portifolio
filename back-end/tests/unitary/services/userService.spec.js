@@ -1,21 +1,21 @@
-const UserService = require('../../services/userService');
+const UserService = require('../../../services/userService');
 const bcrypt = require('bcryptjs');
 
-jest.mock('../../prisma/prisma', () => ({
+jest.mock('../../../prisma/prisma', () => ({
   user: {
     findUnique: jest.fn(),
     create: jest.fn(),
   },
 }));
-jest.mock('../../services/logService', () => ({
+jest.mock('../../../services/logService', () => ({
   logError: jest.fn(),
 }));
 jest.mock('bcryptjs', () => ({
   hashSync: jest.fn(() => 'hashedPassword'),
 }));
 
-const prisma = require('../../prisma/prisma');
-const logger = require('../../services/logService');
+const prisma = require('../../../prisma/prisma');
+const logger = require('../../../services/logService');
 
 describe('UserService', () => {
   let service;

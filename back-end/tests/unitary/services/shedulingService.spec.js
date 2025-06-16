@@ -1,16 +1,16 @@
 const schedule = require('node-schedule');
-const { sendNotification } = require('../../services/fcmService');
-const prisma = require('../../prisma/prisma');
+const { sendNotification } = require('../../../services/fcmService');
+const prisma = require('../../../prisma/prisma');
 
 jest.mock('node-schedule', () => ({
   scheduleJob: jest.fn(() => ({
     cancel: jest.fn(),
   })),
 }));
-jest.mock('../../services/fcmService', () => ({
+jest.mock('../../../services/fcmService', () => ({
   sendNotification: jest.fn(),
 }));
-jest.mock('../../prisma/prisma', () => ({
+jest.mock('../../../prisma/prisma', () => ({
   task: {
     findMany: jest.fn(),
   },
@@ -20,7 +20,7 @@ const {
   schedulingService,
   cancelScheduledTask,
   scheduleUserTasks,
-} = require('../../services/schedulingService');
+} = require('../../../services/schedulingService');
 
 describe('schedulingService', () => {
   beforeEach(() => {

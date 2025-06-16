@@ -1,6 +1,6 @@
-const { AuthController } = require('../../controllers/authController');
+const { AuthController } = require('../../../controllers/authController');
 
-jest.mock('../../services/authService');
+jest.mock('../../../services/authService');
 
 describe('AuthController', () => {
   let controller;

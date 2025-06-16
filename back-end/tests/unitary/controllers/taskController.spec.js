@@ -1,4 +1,4 @@
-const { TaskController } = require('../../controllers/taskController');
+const { TaskController } = require('../../../controllers/taskController');
 
 describe('TaskController', () => {
   let controller;

@@ -1,9 +1,9 @@
-const authenticateToken = require('../../middlewares/authenticateToken');
-const getUserFromToken = require('../../helpers/getUserFromToken');
-const logger = require('../../services/logService');
+const authenticateToken = require('../../../middlewares/authenticateToken');
+const getUserFromToken = require('../../../helpers/getUserFromToken');
+const logger = require('../../../services/logService');
 
-jest.mock('../../helpers/getUserFromToken');
-jest.mock('../../services/logService', () => ({
+jest.mock('../../../helpers/getUserFromToken');
+jest.mock('../../../services/logService', () => ({
   logError: jest.fn(),
 }));
 
