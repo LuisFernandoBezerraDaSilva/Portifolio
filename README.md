@@ -8,4 +8,4 @@ Additional Notes:
 
 Published version: https://sophts.shop
 
-For notifications to work, you'll need my private Google key. I haven't included it on my GitHub for security reasons.
+For notifications to work if you run my project locally, you'll need my private Google key. I haven't included it on my GitHub for security reasons.
