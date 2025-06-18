@@ -1,8 +1,9 @@
-Para executar esse software, você precisará do docker baixado na url: https://www.docker.com/products/docker-desktop/
+Here's the translation of your text into English, keeping it clear and concise for technical instructions:
 
-abra o CMD dentro da página do projeto (logo após abrir "desafio tecnico inovanti"), então rode o codigo:
-```docker compose up --build```
+To run this software, you will need Docker downloaded from: https://www.docker.com/products/docker-desktop/
 
-versão publicada: **https://sophts.shop**
+Open your CMD (command prompt) inside the project's main folder (right after opening "desafio tecnico inovanti"), then run the command: docker compose up --build
 
-*para que as notificações funcionem, será necessário minha chave privada Google, não a coloquei no meu github por razões de segurança.
+Additional Notes:
+Published version: https://sophts.shop
+For notifications to work, you'll need my private Google key. I haven't included it on my GitHub for security reasons.
