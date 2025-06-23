@@ -12,9 +12,9 @@ class TaskController extends BaseController {
       const status = req.query.status || "";
       const page = Number.isNaN(parseInt(req.query.page)) ? 1 : parseInt(req.query.page);
       const limit = Number.isNaN(parseInt(req.query.limit)) ? 10 : parseInt(req.query.limit);
-
-      const result = await this.service.getAll(req.user, filter, status, page, limit);
-
+  
+      const result = await this.service.getAll(req.user.id, filter, status, page, limit);
+  
       res.status(200).json({
         tasks: result.tasks,
         total: result.total,
