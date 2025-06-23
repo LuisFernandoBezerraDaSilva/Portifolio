@@ -10,21 +10,12 @@ class TaskService extends BaseService {
     super(prisma.task, taskSchema);
   }
 
-  async getAll(token, filter, status, page = 1, limit = 10) {
+    async getAll(userId, filter, status, page = 1, limit = 10) {
     try {
-      const session = await prisma.session.findUnique({
-        where: { token },
-        include: { user: true },
-      });
-
-      if (!session || !session.isValid || new Date(session.expiresAt) < new Date()) {
-        throw new Error('User not found or invalid/expired token');
-      }
-
       const where = {
-        userId: session.userId,
+        userId,
       };
-
+  
       if (filter) {
         let dateFilter = parseDateFilter(filter);
         where.OR = [
@@ -41,13 +32,13 @@ class TaskService extends BaseService {
           where.OR.push({ status: { equals: filter.toUpperCase() } });
         }
       }
-
+  
       if (status && ["CONCLUIDO", "EM_ANDAMENTO", "A_FAZER"].includes(status.toUpperCase())) {
         where.status = status.toUpperCase();
       }
-
+  
       const skip = (page - 1) * limit;
-
+  
       const [tasks, total] = await Promise.all([
         this.model.findMany({
           where,
@@ -57,7 +48,7 @@ class TaskService extends BaseService {
         }),
         this.model.count({ where })
       ]);
-
+  
       return {
         tasks,
         total,
