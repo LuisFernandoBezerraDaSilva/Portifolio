@@ -3,10 +3,16 @@ const request = require('./app.integration.spec');
 describe('Task Integration', () => {
   let token;
   let createdTaskId;
+  let otherToken;
 
   const testUser = {
     username: 'taskuser',
     password: 'taskpassword'
+  };
+
+  const otherUser = {
+    username: 'taskuser1',
+    password: 'taskpassword1'
   };
 
   const testTask = {
@@ -17,10 +23,13 @@ describe('Task Integration', () => {
   };
 
   beforeAll(async () => {
-    // Register and login user to get token
     await request.post('/auth/register').send(testUser);
     const loginRes = await request.post('/auth/login').send(testUser);
     token = loginRes.body.token;
+
+    await request.post('/auth/register').send(otherUser);
+    const otherLoginRes = await request.post('/auth/login').send(otherUser);
+    otherToken = otherLoginRes.body.token;
   });
 
   it('should create a new task', async () => {
@@ -43,6 +52,17 @@ describe('Task Integration', () => {
 
     expect(Array.isArray(response.body.tasks)).toBe(true);
     expect(response.body.tasks.length).toBeGreaterThan(0);
+    expect(response.body.tasks.some(t => t.id === createdTaskId)).toBe(true);
+  });
+
+  it('should not show the created task to another user', async () => {
+    const response = await request
+      .get('/tasks')
+      .set('Authorization', `Bearer ${otherToken}`)
+      .expect(200);
+
+    expect(Array.isArray(response.body.tasks)).toBe(true);
+    expect(response.body.tasks.some(t => t.id === createdTaskId)).toBe(false);
   });
 
   it('should get a single task by id', async () => {
