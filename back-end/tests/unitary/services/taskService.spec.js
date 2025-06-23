@@ -33,22 +33,18 @@ describe('TaskService', () => {
     service = new TaskService();
   });
 
-  test('getAll should throw if session is invalid', async () => {
-    prisma.session.findUnique.mockResolvedValue(null);
-    await expect(service.getAll('token')).rejects.toThrow('Error fetching tasks for user');
-  });
-
   test('getAll should return tasks and total', async () => {
-    prisma.session.findUnique.mockResolvedValue({
-      userId: 1,
-      isValid: true,
-      expiresAt: new Date(Date.now() + 10000),
-      user: {},
-    });
     prisma.task.findMany.mockResolvedValue([{ id: 1, title: 'Task' }]);
     prisma.task.count.mockResolvedValue(1);
 
-    const result = await service.getAll('token');
+    const result = await service.getAll(1);
+    expect(prisma.task.findMany).toHaveBeenCalledWith({
+      where: { userId: 1 },
+      skip: 0,
+      take: 10,
+      orderBy: { date: 'desc' }
+    });
+    expect(prisma.task.count).toHaveBeenCalledWith({ where: { userId: 1 } });
     expect(result.tasks).toEqual([{ id: 1, title: 'Task' }]);
     expect(result.total).toBe(1);
     expect(result.page).toBe(1);
@@ -85,8 +81,8 @@ describe('TaskService', () => {
   });
 
   test('getAll should log and throw on error', async () => {
-    prisma.session.findUnique.mockRejectedValue(new Error('fail'));
-    await expect(service.getAll('token')).rejects.toThrow('Error fetching tasks for user');
+    prisma.task.findMany.mockRejectedValue(new Error('fail'));
+    await expect(service.getAll(1)).rejects.toThrow('Error fetching tasks for user');
     expect(logger.logError).toHaveBeenCalled();
   });
 

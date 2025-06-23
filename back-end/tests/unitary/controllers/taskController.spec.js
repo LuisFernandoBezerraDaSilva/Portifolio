@@ -31,7 +31,7 @@ describe('TaskController', () => {
     jest.restoreAllMocks();
   });
 
-  it('should return tasks on getAll', async () => {
+    it('should return tasks on getAll', async () => {
     service.getAll.mockResolvedValue({
       tasks: [{ id: 1 }],
       total: 1,
@@ -39,7 +39,7 @@ describe('TaskController', () => {
       totalPages: 1,
     });
     await controller.getAll(req, res);
-    expect(service.getAll).toHaveBeenCalledWith(req.user, "", "", 1, 10);
+    expect(service.getAll).toHaveBeenCalledWith(req.user.id, "", "", 1, 10);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       tasks: [{ id: 1 }],
