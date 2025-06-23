@@ -17,3 +17,4 @@ afterAll(async () => {
 module.exports = request(app);
 
 require('./user.integration.spec');
+require('./auth.integration.spec');
