@@ -7,7 +7,6 @@ describe('Auth Integration', () => {
   };
 
   beforeAll(async () => {
-    // Cria o usuário para o teste de login
     await request.post('/auth/register').send(testUser);
   });
 
