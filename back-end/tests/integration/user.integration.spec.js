@@ -6,7 +6,7 @@ describe('User Integration', () => {
     password: 'testpassword'
   };
 
-  it('deve registrar um novo usuário com sucesso', async () => {
+  it('should successfully register a new user', async () => {
     const response = await request
       .post('/auth/register')
       .send(testUser)
