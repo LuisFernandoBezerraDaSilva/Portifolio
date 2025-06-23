@@ -15,8 +15,10 @@ app.use(express.json());
 
 app.use('/', routes);
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running in port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running in port ${PORT}`);
+  });
+}
 
-module.exports = { prisma, server };
+module.exports = { app, prisma };

@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "seed": "node prisma/seed.js",
-    "start": "node index.js"
+  "test": "npm run test:unit && npm run test:integration",
+  "test:unit": "jest tests/unitary",
+  "test:integration": "jest tests/integration/app.integration.spec.js",
+  "seed": "node prisma/seed.js",
+  "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "jest": "^30.0.0",
-    "prisma": "^5.11.0"
+    "prisma": "^5.11.0",
+    "supertest": "^7.1.1"
   }
 }
