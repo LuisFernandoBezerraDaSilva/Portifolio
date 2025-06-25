@@ -1,0 +1,27 @@
+<mat-card>
+  <mat-card-title>{{ taskId ? 'Edit Task' : 'New Task' }}</mat-card-title>
+  <mat-card-content>
+    <form #taskForm="ngForm">
+      <mat-form-field appearance="fill">
+        <mat-label>Title</mat-label>
+        <input matInput [(ngModel)]="title" name="title" required #titleCtrl="ngModel">
+        <mat-error *ngIf="titleCtrl.invalid && titleCtrl.touched">Title is required</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="description" name="description" required #descCtrl="ngModel"></textarea>
+        <mat-error *ngIf="descCtrl.invalid && descCtrl.touched">Description is required</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput [(ngModel)]="date" name="date" type="date" required #dateCtrl="ngModel">
+        <mat-error *ngIf="dateCtrl.invalid && dateCtrl.touched">Date is required</mat-error>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+  <mat-card-actions style="justify-content: center;">
+    <button mat-raised-button color="primary" (click)="saveTask(taskForm)" [disabled]="taskForm.invalid">
+      {{ taskId ? 'Update' : 'Save' }}
+    </button>
+  </mat-card-actions>
+</mat-card>

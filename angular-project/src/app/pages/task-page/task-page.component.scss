@@ -1,0 +1,68 @@
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  mat-card {
+    width: 95%;
+    height: 98%;
+    padding: 1rem;
+  }
+  
+  mat-card-title {
+    margin-top: 1vh;
+    margin-bottom: 0.5vh;
+  }
+  
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  mat-form-field {
+    width: 90%;
+    margin: 0 5%;
+  }
+  
+  mat-card-actions {
+    display: flex;
+    justify-content: center;
+  }
+
+  .mat-mdc-header-cell{
+    background-color: #6b6b6b !important; 
+    color: #fff !important;
+  }
+
+  table.mat-table th.mat-header-cell {
+    background-color: #f000; 
+    font-weight: bold;
+    color: #000 !important;
+  }
+
+  table{
+    width: 100%; 
+    margin-top: 16px;
+  }
+
+  .actions-column {
+    width: 10%;
+    text-align: right;
+  }
+
+  .actions-column-title {
+    width: 10%;
+    text-align: center;
+  }
+
+  .date-column {
+    max-width: 100px;
+    width: 1000px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }

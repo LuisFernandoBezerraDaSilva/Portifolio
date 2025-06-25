@@ -1,0 +1,17 @@
+FROM node:22
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install -g @angular/cli
+
+RUN ng analytics disable --global
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 4200
+
+CMD ["npm", "start"]
