@@ -47,8 +47,10 @@ export class TaskPageComponent implements OnInit {
   fetchTasks(): void {
     this.isLoading = true; 
     this.taskService.getAllTasks().subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
+      next: (data: any) => {
+        // Se a resposta tem tasks dentro, usar data.tasks, senão usar data diretamente
+        const tasksArray = data.tasks || data;
+        this.dataSource.data = tasksArray;
         this.isLoading = false; 
       },
       error: (err) => {

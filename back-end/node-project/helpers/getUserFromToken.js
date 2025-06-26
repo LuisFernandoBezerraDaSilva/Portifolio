@@ -14,7 +14,11 @@ async function getUserFromToken(token) {
   ) {
     return null;
   }
-  return session.user;
+  // Incluir o fcmToken da sessão no objeto do usuário
+  return {
+    ...session.user,
+    fcmToken: session.fcmToken
+  };
 }
 
 module.exports = getUserFromToken;
