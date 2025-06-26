@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class StorageService {
-  private tokenKey: string = 'authToken';
+  private tokenKey: string = 'accessToken';
 
   setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token);
