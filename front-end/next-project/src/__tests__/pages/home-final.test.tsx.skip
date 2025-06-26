@@ -1,0 +1,79 @@
+import { render, screen, fireEvent } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+
+// Mock next/navigation
+const mockPush = jest.fn()
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push: mockPush }),
+}))
+
+// Mock AuthService with a factory function to avoid hoisting issues
+const mockLogin = jest.fn()
+jest.mock('../../services/authService', () => ({
+  AuthService: jest.fn(() => ({
+    login: mockLogin,
+  })),
+}))
+
+// Mock Firebase
+jest.mock('../../../firebase', () => ({ messaging: {} }))
+jest.mock('firebase/messaging', () => ({ getToken: jest.fn() }))
+
+// Mock localStorage
+const localStorageMock = {
+  getItem: jest.fn(() => 'mock-fcm-token'),
+  setItem: jest.fn(),
+}
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
+// Mock serviceWorker
+Object.defineProperty(window.navigator, 'serviceWorker', {
+  value: { register: jest.fn(() => Promise.resolve({})) },
+})
+
+// NOW import the component
+import Home from '../../app/page'
+
+describe('Home Page - Working Test', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockLogin.mockReset()
+    localStorageMock.getItem.mockReturnValue('mock-fcm-token')
+  })
+
+  it('should render login form components', () => {
+    render(<Home />)
+    
+    expect(screen.getByText('Login')).toBeInTheDocument()
+    expect(document.querySelector('input[type="text"]')).toBeInTheDocument()
+    expect(document.querySelector('input[type="password"]')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Entrar' })).toBeInTheDocument()
+  })
+
+  it('should submit form and call login service', async () => {
+    const user = userEvent.setup()
+    mockLogin.mockResolvedValue({ token: 'test-token' })
+    
+    render(<Home />)
+    
+    const userField = document.querySelector('input[type="text"]') as HTMLInputElement
+    const passwordField = document.querySelector('input[type="password"]') as HTMLInputElement
+    const submitButton = screen.getByRole('button', { name: 'Entrar' })
+    
+    // Fill form
+    await user.type(userField, 'testuser')
+    await user.type(passwordField, 'testpass')
+    
+    // Submit form using click instead of fireEvent.submit
+    await user.click(submitButton)
+    
+    // Check if login was called (with a reasonable timeout)
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    expect(mockLogin).toHaveBeenCalledWith({
+      username: 'testuser',
+      password: 'testpass',
+      fcmToken: 'mock-fcm-token',
+    })
+  })
+})

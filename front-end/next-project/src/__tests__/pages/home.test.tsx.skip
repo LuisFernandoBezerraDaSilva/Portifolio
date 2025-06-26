@@ -1,0 +1,202 @@
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import Home from '../../app/page'
+
+// Mock next/navigation
+const mockPush = jest.fn()
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}))
+
+// Mock AuthService with a factory function to avoid hoisting issues
+const mockLogin = jest.fn()
+jest.mock('../../services/authService', () => ({
+  __esModule: true,
+  AuthService: jest.fn(() => ({
+    login: mockLogin,
+  })),
+}))
+
+// Mock Firebase
+jest.mock('../../../firebase', () => ({
+  messaging: {},
+}))
+
+jest.mock('firebase/messaging', () => ({
+  getToken: jest.fn(),
+}))
+
+// Mock localStorage
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+}
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+})
+
+// Mock serviceWorker
+Object.defineProperty(window.navigator, 'serviceWorker', {
+  value: {
+    register: jest.fn(() => Promise.resolve({})),
+  },
+  writable: true,
+})
+
+describe('Home Page', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    localStorageMock.getItem.mockReturnValue('mock-fcm-token')
+    mockLogin.mockReset()
+  })
+
+  it('should render login form', () => {
+    render(<Home />)
+    
+    expect(screen.getByText('Login')).toBeInTheDocument()
+    
+    // Use more robust queries for MUI components
+    const userInput = document.querySelector('input[type="text"]')
+    const passwordInput = document.querySelector('input[type="password"]')
+    const submitButton = screen.getByRole('button', { name: 'Entrar' })
+    
+    expect(userInput).toBeInTheDocument()
+    expect(passwordInput).toBeInTheDocument()
+    expect(submitButton).toBeInTheDocument()
+    expect(screen.getByText('criar conta!')).toBeInTheDocument()
+  })
+
+  it('should handle user input in form fields', async () => {
+    const user = userEvent.setup()
+    render(<Home />)
+    
+    const userField = document.querySelector('input[type="text"]') as HTMLInputElement
+    const passwordField = document.querySelector('input[type="password"]') as HTMLInputElement
+    
+    await user.type(userField, 'testuser')
+    await user.type(passwordField, 'testpassword')
+    
+    expect(userField).toHaveValue('testuser')
+    expect(passwordField).toHaveValue('testpassword')
+  })
+
+  it('should handle successful login', async () => {
+    const user = userEvent.setup()
+    const mockResponse = { token: 'mock-token' }
+    mockLogin.mockResolvedValue(mockResponse)
+    
+    render(<Home />)
+    
+    const userField = document.querySelector('input[type="text"]') as HTMLInputElement
+    const passwordField = document.querySelector('input[type="password"]') as HTMLInputElement
+    const form = document.querySelector('form') as HTMLFormElement
+    
+    await user.type(userField, 'testuser')
+    await user.type(passwordField, 'testpassword')
+    fireEvent.submit(form)
+    
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith({
+        username: 'testuser',
+        password: 'testpassword',
+        fcmToken: 'mock-fcm-token',
+      })
+    })
+    
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('accessToken', 'mock-token')
+    expect(mockPush).toHaveBeenCalledWith('/task-list')
+  })
+
+  it('should handle login failure', async () => {
+    const user = userEvent.setup()
+    mockLogin.mockRejectedValue(new Error('Invalid credentials'))
+    
+    render(<Home />)
+    
+    const userField = document.querySelector('input[type="text"]') as HTMLInputElement
+    const passwordField = document.querySelector('input[type="password"]') as HTMLInputElement
+    const form = document.querySelector('form') as HTMLFormElement
+    
+    await user.type(userField, 'wronguser')
+    await user.type(passwordField, 'wrongpassword')
+    fireEvent.submit(form)
+    
+    await waitFor(() => {
+      expect(screen.getByText('Usuário ou senha inválidos')).toBeInTheDocument()
+    })
+    
+    expect(mockPush).not.toHaveBeenCalled()
+  })
+
+  it('should navigate to user registration form', async () => {
+    const user = userEvent.setup()
+    render(<Home />)
+    
+    const createAccountLink = screen.getByText('criar conta!')
+    await user.click(createAccountLink)
+    
+    expect(mockPush).toHaveBeenCalledWith('/user-form')
+  })
+
+  it('should handle login with no FCM token', async () => {
+    const user = userEvent.setup()
+    localStorageMock.getItem.mockReturnValue(null)
+    const mockResponse = { token: 'mock-token' }
+    mockLogin.mockResolvedValue(mockResponse)
+    
+    render(<Home />)
+    
+    const userField = document.querySelector('input[type="text"]') as HTMLInputElement
+    const passwordField = document.querySelector('input[type="password"]') as HTMLInputElement
+    const form = document.querySelector('form') as HTMLFormElement
+    
+    await user.type(userField, 'testuser')
+    await user.type(passwordField, 'testpassword')
+    fireEvent.submit(form)
+    
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith({
+        username: 'testuser',
+        password: 'testpassword',
+        fcmToken: undefined,
+      })
+    })
+  })
+
+  it('should clear error when form is resubmitted', async () => {
+    const user = userEvent.setup()
+    mockLogin
+      .mockRejectedValueOnce(new Error('Invalid credentials'))
+      .mockResolvedValueOnce({ token: 'mock-token' })
+    
+    render(<Home />)
+    
+    const userField = document.querySelector('input[type="text"]') as HTMLInputElement
+    const passwordField = document.querySelector('input[type="password"]') as HTMLInputElement
+    const form = document.querySelector('form') as HTMLFormElement
+    
+    // First login attempt (fail)
+    await user.type(userField, 'wronguser')
+    await user.type(passwordField, 'wrongpassword')
+    fireEvent.submit(form)
+    
+    await waitFor(() => {
+      expect(screen.getByText('Usuário ou senha inválidos')).toBeInTheDocument()
+    })
+    
+    // Clear fields and try again
+    await user.clear(userField)
+    await user.clear(passwordField)
+    await user.type(userField, 'testuser')
+    await user.type(passwordField, 'testpassword')
+    fireEvent.submit(form)
+    
+    await waitFor(() => {
+      expect(screen.queryByText('Usuário ou senha inválidos')).not.toBeInTheDocument()
+    })
+  })
+})

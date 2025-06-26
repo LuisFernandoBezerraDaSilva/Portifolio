@@ -1,0 +1,100 @@
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import Home from '../../app/page'
+
+// Mock next/navigation
+const mockPush = jest.fn()
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}))
+
+// Mock AuthService with a factory function to avoid hoisting issues
+const mockLogin = jest.fn()
+jest.mock('../../services/authService', () => ({
+  __esModule: true,
+  AuthService: jest.fn(() => ({
+    login: mockLogin,
+  })),
+}))
+
+// Mock Firebase
+jest.mock('../../../firebase', () => ({
+  messaging: {},
+}))
+
+jest.mock('firebase/messaging', () => ({
+  getToken: jest.fn(),
+}))
+
+// Mock localStorage
+const localStorageMock = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+}
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+})
+
+// Mock serviceWorker
+Object.defineProperty(window.navigator, 'serviceWorker', {
+  value: {
+    register: jest.fn(() => Promise.resolve({})),
+  },
+  writable: true,
+})
+
+describe('Home Page - Simple Test', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    localStorageMock.getItem.mockReturnValue('mock-fcm-token')
+    mockLogin.mockReset()
+  })
+
+  it('should render login form', () => {
+    render(<Home />)
+    
+    expect(screen.getByText('Login')).toBeInTheDocument()
+    
+    const userInput = document.querySelector('input[type="text"]')
+    const passwordInput = document.querySelector('input[type="password"]')
+    const submitButton = screen.getByRole('button', { name: 'Entrar' })
+    
+    expect(userInput).toBeInTheDocument()
+    expect(passwordInput).toBeInTheDocument()
+    expect(submitButton).toBeInTheDocument()
+  })
+
+  it('should call login function when form is submitted', async () => {
+    const user = userEvent.setup()
+    const mockResponse = { token: 'mock-token' }
+    mockLogin.mockResolvedValue(mockResponse)
+    
+    render(<Home />)
+    
+    const userField = document.querySelector('input[type="text"]') as HTMLInputElement
+    const passwordField = document.querySelector('input[type="password"]') as HTMLInputElement
+    const form = document.querySelector('form') as HTMLFormElement
+    
+    // Fill the form
+    await user.type(userField, 'testuser')
+    await user.type(passwordField, 'testpassword')
+    
+    // Submit the form
+    fireEvent.submit(form)
+    
+    // Wait for the login function to be called
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalled()
+    }, { timeout: 3000 })
+    
+    expect(mockLogin).toHaveBeenCalledWith({
+      username: 'testuser',
+      password: 'testpassword',
+      fcmToken: 'mock-fcm-token',
+    })
+  })
+})
