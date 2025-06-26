@@ -1,6 +1,6 @@
 <mat-card>
-  <app-loading *ngIf="isLoading"></app-loading>
-  <ng-container *ngIf="!isLoading">
+  <app-loading *ngIf="isLoading$ | async"></app-loading>
+  <ng-container *ngIf="!(isLoading$ | async)">
 
     <mat-card-title>
       <div style="display: flex; justify-content: space-between; align-items: center; margin: 0px 2%;">

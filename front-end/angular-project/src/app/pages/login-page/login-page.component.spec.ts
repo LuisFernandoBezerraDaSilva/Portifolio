@@ -5,40 +5,50 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { LoginPageComponent } from './login-page.component';
-import { AuthService } from '../../services/auth.service';
-import { StorageService } from '../../services/storage.service';
+import * as AuthActions from '../../store/auth/auth.actions';
+import * as AuthSelectors from '../../store/auth/auth.selectors';
 
 describe('LoginPageComponent', () => {
   let component: LoginPageComponent;
   let fixture: ComponentFixture<LoginPageComponent>;
   let router: jasmine.SpyObj<Router>;
-  let authService: jasmine.SpyObj<AuthService>;
-  let storageService: jasmine.SpyObj<StorageService>;
+  let store: MockStore;
   let snackBar: jasmine.SpyObj<MatSnackBar>;
+
+  const initialState = {
+    auth: {
+      user: null,
+      token: null,
+      isLoading: false,
+      error: null,
+      authenticated: false
+    }
+  };
 
   beforeEach(async () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-    const authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
-    const storageServiceSpy = jasmine.createSpyObj('StorageService', ['setToken']);
     const snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
-      imports: [LoginPageComponent, BrowserAnimationsModule, HttpClientTestingModule, FormsModule]
+      imports: [LoginPageComponent, BrowserAnimationsModule, HttpClientTestingModule, FormsModule],
+      providers: [
+        provideMockStore({ initialState }),
+        { provide: Router, useValue: routerSpy },
+        { provide: MatSnackBar, useValue: snackBarSpy }
+      ]
     })
-    .overrideProvider(AuthService, { useValue: authServiceSpy })
-    .overrideProvider(StorageService, { useValue: storageServiceSpy })
-    .overrideProvider(Router, { useValue: routerSpy })
-    .overrideProvider(MatSnackBar, { useValue: snackBarSpy })
     .compileComponents();
 
     fixture = TestBed.createComponent(LoginPageComponent);
     component = fixture.componentInstance;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-    authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
-    storageService = TestBed.inject(StorageService) as jasmine.SpyObj<StorageService>;
+    store = TestBed.inject(Store) as MockStore;
     snackBar = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
     
+    spyOn(store, 'dispatch');
     fixture.detectChanges();
   });
 
@@ -64,9 +74,6 @@ describe('LoginPageComponent', () => {
   });
 
   it('should login successfully with valid credentials', fakeAsync(() => {
-    const mockResponse = { token: 'mock-token' };
-    authService.login.and.returnValue(of(mockResponse));
-    
     component.username = 'testuser';
     component.password = 'testpass';
     
@@ -81,9 +88,9 @@ describe('LoginPageComponent', () => {
     component.login(mockForm);
     tick(); // Advance the virtual clock to handle async operations
 
-    expect(authService.login).toHaveBeenCalledWith({ username: 'testuser', password: 'testpass' });
-    expect(storageService.setToken).toHaveBeenCalledWith('mock-token');
-    expect(router.navigate).toHaveBeenCalledWith(['/tasks']);
+    expect(store.dispatch).toHaveBeenCalledWith(AuthActions.login({ 
+      credentials: { username: 'testuser', password: 'testpass' }
+    }));
   }));
 
   it('should show error message for invalid form', fakeAsync(() => {
@@ -103,31 +110,22 @@ describe('LoginPageComponent', () => {
     expect(mockForm.controls.password.markAsTouched).toHaveBeenCalled();
   }));
 
-  it('should handle 401 login error', fakeAsync(() => {
-    const error = { status: 401 };
-    authService.login.and.returnValue(throwError(() => error));
-    
-    component.username = 'testuser';
-    component.password = 'wrongpass';
-    
-    const mockForm = { invalid: false };
-    component.login(mockForm);
-    tick(); // Advance the virtual clock to handle async operations
-
-    expect(snackBar.open).toHaveBeenCalledWith('Incorrect password!', 'Close', { duration: 3000 });
-  }));
-
-  it('should handle general login error', fakeAsync(() => {
-    const error = { status: 500 };
-    authService.login.and.returnValue(throwError(() => error));
-    
+  it('should dispatch login action on valid form submission', () => {
     component.username = 'testuser';
     component.password = 'testpass';
     
-    const mockForm = { invalid: false };
-    component.login(mockForm);
-    tick(); // Advance the virtual clock to handle async operations
+    const mockForm = jasmine.createSpyObj('NgForm', [], {
+      invalid: false,
+      controls: {
+        username: { markAsTouched: jasmine.createSpy() },
+        password: { markAsTouched: jasmine.createSpy() }
+      }
+    });
 
-    expect(snackBar.open).toHaveBeenCalledWith('Error logging in!', 'Close', { duration: 3000 });
-  }));
+    component.login(mockForm);
+
+    expect(store.dispatch).toHaveBeenCalledWith(AuthActions.login({ 
+      credentials: { username: 'testuser', password: 'testpass' }
+    }));
+  });
 });

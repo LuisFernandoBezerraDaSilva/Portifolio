@@ -6,10 +6,17 @@ import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SharedModule } from '../../shared.module';
-import { TaskService } from '../../services/task.service';
 import { Router } from '@angular/router';
 import { LoadingComponent } from '../../components/loading/loading.component';
 import { DateBrPipe } from '../../pipes/date-pipe';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { BasePageComponent } from '../base-page/base-page.component';
+
+import * as TaskActions from '../../store/task/task.actions';
+import * as TaskSelectors from '../../store/task/task.selectors';
+import { AppState } from '../../store/app.state';
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-task-page',
@@ -25,59 +32,56 @@ import { DateBrPipe } from '../../pipes/date-pipe';
     SharedModule,
     LoadingComponent
   ],
-  providers: [TaskService],
   templateUrl: './task-page.component.html',
   styleUrls: ['./task-page.component.scss']
 })
-export class TaskPageComponent implements OnInit {
-  dataSource = new MatTableDataSource<any>([]);
+export class TaskPageComponent extends BasePageComponent implements OnInit {
+  dataSource = new MatTableDataSource<Task>([]);
   displayedColumns: string[] = ['date', 'title', 'description', 'actions'];
-  isLoading = true;
+
+  tasks$: Observable<Task[]>;
+  isLoading$: Observable<boolean>;
+  error$: Observable<string | null>;
 
   constructor(
-    private taskService: TaskService, 
+    private store: Store<AppState>,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.fetchTasks();
+  ) {
+    super();
+    this.tasks$ = this.store.select(TaskSelectors.selectTasks);
+    this.isLoading$ = this.store.select(TaskSelectors.selectTasksLoading);
+    this.error$ = this.store.select(TaskSelectors.selectTasksError);
   }
 
-  fetchTasks(): void {
-    this.isLoading = true; 
-    this.taskService.getAllTasks().subscribe({
-      next: (data: any) => {
-        // Se a resposta tem tasks dentro, usar data.tasks, senão usar data diretamente
-        const tasksArray = data.tasks || data;
-        this.dataSource.data = tasksArray;
-        this.isLoading = false; 
-      },
-      error: (err) => {
-        console.error('Error fetching tasks:', err);
-        this.isLoading = false; 
+  ngOnInit(): void {
+    this.store.dispatch(TaskActions.loadTasks());
+    
+    // Subscribe to tasks
+    const tasksSubscription = this.tasks$.subscribe(tasks => {
+      this.dataSource.data = tasks;
+    });
+
+    // Subscribe to errors
+    const errorSubscription = this.error$.subscribe(error => {
+      if (error) {
+        this.snackBar.open(`Error: ${error}`, 'Close', { duration: 3000 });
       }
     });
+
+    this.addSubscription(tasksSubscription);
+    this.addSubscription(errorSubscription);
   }
 
   deleteTask(taskId: string): void {
-    this.taskService.deleteTask(taskId).subscribe({
-      next: () => {
-        this.snackBar.open('Task deleted successfully!', 'Close', { duration: 3000 });
-        this.fetchTasks();
-      },
-      error: (err) => {
-        console.error('Error deleting task:', err);
-        this.snackBar.open('Error deleting task!', 'Close', { duration: 3000 });
-      }
-    });
+    this.store.dispatch(TaskActions.deleteTask({ id: taskId }));
   }
 
   createNewTask(): void {
     this.router.navigate(['/task']); 
   }
 
-  editTask(task: any): void {
+  editTask(task: Task): void {
     this.router.navigate(['/task'], {
       queryParams: {
         taskId: task.id,

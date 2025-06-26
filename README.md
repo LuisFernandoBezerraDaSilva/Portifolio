@@ -29,8 +29,9 @@ This repository is organized into multiple independent projects:
 
 #### Angular Project
 - **Location**: `front-end/angular-project/`
-- **Tech Stack**: Angular 18+, Material Design, RxJS
-- **Features**: Task management UI, authentication, responsive design
+- **Tech Stack**: Angular 18+, Material Design, RxJS, NgRx
+- **Features**: Task management UI, authentication, responsive design, state management with NgRx
+- **State Management**: Centralized store with NgRx for auth and task management
 - **Tests**: Comprehensive unit tests (64 tests passing)
 
 #### Next.js Project
@@ -127,12 +128,40 @@ python -m pytest          # Run Python tests (if available)
 
 *Note: For notifications to work when running locally, you'll need the Firebase service account key. This file is not included in the repository for security reasons. The Python application runs independently on Windows systems but also requires `.env` configuration and Google Cloud credentials that are excluded for security purposes.*
 
+## 🏪 State Management (NgRx)
+
+The Angular application implements **NgRx** for comprehensive state management, demonstrating enterprise-level architecture patterns:
+
+### 🏗️ Store Architecture
+- **Centralized State**: All application state managed through NgRx store
+- **Actions**: Type-safe action creators for auth and task operations
+- **Reducers**: Pure functions handling state transitions
+- **Effects**: Side effect management for API calls and business logic
+- **Selectors**: Optimized state selection with memoization
+
+### 🔄 Implemented Features
+- **Authentication State**: User session, login status, token management
+- **Task Management**: CRUD operations with entity adapter
+- **Loading States**: UI loading indicators for async operations
+- **Error Handling**: Centralized error state management
+- **DevTools Integration**: Redux DevTools for debugging
+
+### 📈 Benefits
+- **Predictable State Updates**: All state changes through dispatched actions
+- **Time Travel Debugging**: Full action history and state inspection
+- **Testability**: Isolated testing with MockStore
+- **Performance**: OnPush change detection compatibility
+- **Type Safety**: Full TypeScript integration
+
+*See `NGRX_IMPLEMENTATION.md` for detailed architecture documentation.*
+
 ## 📚 Technology Stack
 
 | Category | Technologies |
 |----------|-------------|
 | **Backend** | Node.js, Express, Prisma, PostgreSQL |
 | **Frontend** | Angular, Next.js, TypeScript, Material UI, Tailwind CSS |
+| **State Management** | NgRx (Store, Effects, Entity, DevTools) |
 | **Desktop** | Python, Tkinter/PyQt (Windows) |
 | **Testing** | Jest, Jasmine, Karma, Pytest |
 | **DevOps** | Docker, Docker Compose |
