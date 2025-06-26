@@ -60,16 +60,10 @@ export class TaskFormPageComponent extends BasePageComponent implements OnInit {
       form.controls.date?.control.markAsTouched();
       return;
     }
-    const userId = this.storageService.getUserId();
-    if (!userId) {
-      this.snackBar.open('Error: User not authenticated!', 'Close', { duration: 3000 });
-      return;
-    }
 
     const taskPayload = {
       title: this.title,
       description: this.description,
-      userId: userId,
       date: this.date
     };
 

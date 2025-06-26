@@ -44,18 +44,18 @@ describe('TaskPageComponent', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(component.tasks).toEqual([]);
+    expect(component.dataSource.data).toEqual([]);
     expect(component.displayedColumns).toEqual(['date', 'title', 'description', 'actions']);
     expect(component.isLoading).toBe(true);
   });
 
-  it('should have empty tasks array initially', () => {
-    expect(component.tasks.length).toBe(0);
+  it('should have empty dataSource initially', () => {
+    expect(component.dataSource.data.length).toBe(0);
   });
 
   it('should have correct component properties', () => {
     expect(component.displayedColumns).toBeDefined();
-    expect(component.tasks).toBeDefined();
+    expect(component.dataSource).toBeDefined();
     expect(component.isLoading).toBeDefined();
   });
 
@@ -89,7 +89,7 @@ describe('TaskPageComponent', () => {
     component.ngOnInit();
 
     expect(taskService.getAllTasks).toHaveBeenCalled();
-    expect(component.tasks).toEqual(mockTasks);
+    expect(component.dataSource.data).toEqual(mockTasks);
     expect(component.isLoading).toBe(false);
   });
 
@@ -99,7 +99,7 @@ describe('TaskPageComponent', () => {
     component.ngOnInit();
 
     expect(component.isLoading).toBe(false);
-    expect(component.tasks).toEqual([]);
+    expect(component.dataSource.data).toEqual([]);
   });
 
   it('should delete task successfully', fakeAsync(() => {

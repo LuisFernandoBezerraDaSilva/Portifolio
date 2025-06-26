@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +30,7 @@ import { DateBrPipe } from '../../pipes/date-pipe';
   styleUrls: ['./task-page.component.scss']
 })
 export class TaskPageComponent implements OnInit {
-  tasks: any[] = []; 
+  dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = ['date', 'title', 'description', 'actions'];
   isLoading = true;
 
@@ -48,7 +48,7 @@ export class TaskPageComponent implements OnInit {
     this.isLoading = true; 
     this.taskService.getAllTasks().subscribe({
       next: (data) => {
-        this.tasks = data;
+        this.dataSource.data = data;
         this.isLoading = false; 
       },
       error: (err) => {

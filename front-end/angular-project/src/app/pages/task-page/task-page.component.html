@@ -9,7 +9,7 @@
       </div>
     </mat-card-title>
     <mat-card-content>
-      <table mat-table [dataSource]="tasks" class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef class="date-column">Date</th>
@@ -40,7 +40,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
-      <div *ngIf="tasks.length === 0" style="text-align: center; margin-top: 20px;">
+      <div *ngIf="dataSource.data.length === 0" style="text-align: center; margin-top: 20px;">
         <p>No task records created!</p>
       </div>
     </mat-card-content>

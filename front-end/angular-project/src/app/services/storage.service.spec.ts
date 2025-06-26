@@ -27,13 +27,6 @@ describe('StorageService', () => {
     expect(localStorage.setItem).toHaveBeenCalledWith('authToken', token);
   });
 
-  it('should set and get user ID', () => {
-    const userId = 123;
-    service.setUserId(userId);
-    expect(service.getUserId()).toBe('123');
-    expect(localStorage.setItem).toHaveBeenCalledWith('userId', '123');
-  });
-
   it('should clear token', () => {
     service.setToken('test-token');
     service.clearToken();
@@ -41,26 +34,13 @@ describe('StorageService', () => {
     expect(localStorage.removeItem).toHaveBeenCalledWith('authToken');
   });
 
-  it('should clear user ID', () => {
-    service.setUserId(123);
-    service.clearUserId();
-    expect(service.getUserId()).toBeNull();
-    expect(localStorage.removeItem).toHaveBeenCalledWith('userId');
-  });
-
   it('should clear all data', () => {
     service.setToken('test-token');
-    service.setUserId(123);
     service.clearAll();
     expect(service.getToken()).toBeNull();
-    expect(service.getUserId()).toBeNull();
   });
 
   it('should return null when token does not exist', () => {
     expect(service.getToken()).toBeNull();
-  });
-
-  it('should return null when user ID does not exist', () => {
-    expect(service.getUserId()).toBeNull();
   });
 });

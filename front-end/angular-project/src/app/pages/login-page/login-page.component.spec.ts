@@ -20,7 +20,7 @@ describe('LoginPageComponent', () => {
   beforeEach(async () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     const authServiceSpy = jasmine.createSpyObj('AuthService', ['login']);
-    const storageServiceSpy = jasmine.createSpyObj('StorageService', ['setToken', 'setUserId']);
+    const storageServiceSpy = jasmine.createSpyObj('StorageService', ['setToken']);
     const snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
@@ -64,7 +64,7 @@ describe('LoginPageComponent', () => {
   });
 
   it('should login successfully with valid credentials', fakeAsync(() => {
-    const mockResponse = { token: 'mock-token', userId: 123 };
+    const mockResponse = { token: 'mock-token' };
     authService.login.and.returnValue(of(mockResponse));
     
     component.username = 'testuser';
@@ -83,7 +83,6 @@ describe('LoginPageComponent', () => {
 
     expect(authService.login).toHaveBeenCalledWith({ username: 'testuser', password: 'testpass' });
     expect(storageService.setToken).toHaveBeenCalledWith('mock-token');
-    expect(storageService.setUserId).toHaveBeenCalledWith(123);
     expect(router.navigate).toHaveBeenCalledWith(['/tasks']);
   }));
 

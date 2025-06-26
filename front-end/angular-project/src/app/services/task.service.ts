@@ -19,11 +19,11 @@ export class TaskService extends BaseService<any> {
     return this.delete('tasks', taskId);
   }
 
-  createTask(task: { title: string; description: string; userId: string }) {
-    return this.create('tasks', task);
+  createTask(task: { title: string; description: string; date?: string }) {
+    return this.create('task', task);
   }
 
-  updateTask(taskId: string, task: { title: string; description: string; userId: string }) {
-    return this.update('tasks', taskId, task);
+  updateTask(taskId: string, task: { title: string; description: string; date?: string }) {
+    return this.update('task', taskId, task);
   }
 }

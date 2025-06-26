@@ -7,7 +7,7 @@ interface Task {
   id: string;
   title: string;
   description: string;
-  userId: string;
+  date?: string;
 }
 
 describe('TaskService', () => {
@@ -33,8 +33,8 @@ describe('TaskService', () => {
 
   it('should get all tasks', () => {
     const mockTasks: Task[] = [
-      { id: '1', title: 'Task 1', description: 'Description 1', userId: 'user1' },
-      { id: '2', title: 'Task 2', description: 'Description 2', userId: 'user1' }
+      { id: '1', title: 'Task 1', description: 'Description 1' },
+      { id: '2', title: 'Task 2', description: 'Description 2' }
     ];
 
     service.getAllTasks().subscribe(tasks => {
@@ -47,14 +47,14 @@ describe('TaskService', () => {
   });
 
   it('should create a new task', () => {
-    const newTask = { title: 'New Task', description: 'New Description', userId: 'user1' };
+    const newTask = { title: 'New Task', description: 'New Description' };
     const mockResponse = { id: '3', ...newTask };
 
     service.createTask(newTask).subscribe(task => {
       expect(task).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/tasks`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/task`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(newTask);
     req.flush(mockResponse);
@@ -62,14 +62,14 @@ describe('TaskService', () => {
 
   it('should update a task', () => {
     const taskId = '1';
-    const updatedTask = { title: 'Updated Task', description: 'Updated Description', userId: 'user1' };
+    const updatedTask = { title: 'Updated Task', description: 'Updated Description' };
     const mockResponse = { id: taskId, ...updatedTask };
 
     service.updateTask(taskId, updatedTask).subscribe(task => {
       expect(task).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/tasks/${taskId}`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/task/${taskId}`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual(updatedTask);
     req.flush(mockResponse);

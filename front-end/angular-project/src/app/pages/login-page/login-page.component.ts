@@ -51,7 +51,6 @@ export class LoginPageComponent extends BasePageComponent {
     const loginSubscription = this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: (response) => {
         this.storageService.setToken(response.token); 
-        this.storageService.setUserId(response.userId); 
         this.router.navigate(['/tasks']); 
       },
       error: (err) => {

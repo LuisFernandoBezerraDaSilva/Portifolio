@@ -26,7 +26,7 @@ describe('AuthService', () => {
 
   it('should send login request with correct credentials', () => {
     const mockCredentials = { username: 'testuser', password: 'testpass' };
-    const mockResponse = { token: 'mock-token', userId: '123' };
+    const mockResponse = { token: 'mock-token' };
 
     service.login(mockCredentials).subscribe(response => {
       expect(response).toEqual(mockResponse);
