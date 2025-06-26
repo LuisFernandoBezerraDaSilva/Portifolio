@@ -1,0 +1,25 @@
+# Dados sensíveis e configurações
+**/configs/
+**/.env
+*.json
+service-account*.json
+credentials*.json
+
+# Arquivos de build e compilação
+**/dist/
+**/build/
+**/__pycache__/
+*.spec
+
+# Arquivos processados
+**/enviados/
+**/logs*
+
+# Relatórios de teste
+**/htmlcov/
+**/.pytest_cache/
+
+# Arquivos temporários
+*.tmp
+*.log
+*.bak
