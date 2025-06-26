@@ -1,0 +1,242 @@
+
+> angular-project@0.0.0 test
+> ng test --no-watch --browsers=ChromeHeadless
+
+- Generating browser application bundles (phase: setup)...
+✔ Browser application bundle generation complete.
+[32m26 06 2025 01:39:06.112:INFO [karma-server]: [39mKarma v6.4.4 server started at http://localhost:9876/
+[32m26 06 2025 01:39:06.117:INFO [launcher]: [39mLaunching browsers ChromeHeadless with concurrency unlimited
+[32m26 06 2025 01:39:06.125:INFO [launcher]: [39mStarting browser ChromeHeadless
+[32m26 06 2025 01:39:07.953:INFO [Chrome Headless 137.0.0.0 (Windows 10)]: [39mConnected on socket BIAFUeBpAqcAKLV2AAAB with id 72140043
+Chrome Headless 137.0.0.0 (Windows 10): Executed 0 of 60[32m SUCCESS[39m (0 secs / 0 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 1 of 60[32m SUCCESS[39m (0 secs / 0.08 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 2 of 60[32m SUCCESS[39m (0 secs / 0.087 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 3 of 60[32m SUCCESS[39m (0 secs / 0.093 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 4 of 60[32m SUCCESS[39m (0 secs / 0.096 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 5 of 60[32m SUCCESS[39m (0 secs / 0.128 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 6 of 60[32m SUCCESS[39m (0 secs / 0.132 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 7 of 60[32m SUCCESS[39m (0 secs / 0.135 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 8 of 60[32m SUCCESS[39m (0 secs / 0.137 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 9 of 60[32m SUCCESS[39m (0 secs / 0.142 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 10 of 60[32m SUCCESS[39m (0 secs / 0.145 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 11 of 60[32m SUCCESS[39m (0 secs / 0.147 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 12 of 60[32m SUCCESS[39m (0 secs / 0.148 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 13 of 60[32m SUCCESS[39m (0 secs / 0.15 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 14 of 60[32m SUCCESS[39m (0 secs / 0.153 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 15 of 60[32m SUCCESS[39m (0 secs / 0.156 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 16 of 60[32m SUCCESS[39m (0 secs / 0.158 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 17 of 60[32m SUCCESS[39m (0 secs / 0.158 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 18 of 60[32m SUCCESS[39m (0 secs / 0.159 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 19 of 60[32m SUCCESS[39m (0 secs / 0.159 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 20 of 60[32m SUCCESS[39m (0 secs / 0.159 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 21 of 60[32m SUCCESS[39m (0 secs / 0.159 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 22 of 60[32m SUCCESS[39m (0 secs / 0.159 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 23 of 60[32m SUCCESS[39m (0 secs / 0.161 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 24 of 60[32m SUCCESS[39m (0 secs / 0.163 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 25 of 60[32m SUCCESS[39m (0 secs / 0.165 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 26 of 60[32m SUCCESS[39m (0 secs / 0.168 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 27 of 60[32m SUCCESS[39m (0 secs / 0.169 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 28 of 60[32m SUCCESS[39m (0 secs / 0.171 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 29 of 60[32m SUCCESS[39m (0 secs / 0.173 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 30 of 60[32m SUCCESS[39m (0 secs / 0.174 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 31 of 60[32m SUCCESS[39m (0 secs / 0.175 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 32 of 60[32m SUCCESS[39m (0 secs / 0.177 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 33 of 60[32m SUCCESS[39m (0 secs / 0.178 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 34 of 60[32m SUCCESS[39m (0 secs / 0.18 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 35 of 60[32m SUCCESS[39m (0 secs / 0.186 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 36 of 60[32m SUCCESS[39m (0 secs / 0.189 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 37 of 60[32m SUCCESS[39m (0 secs / 0.191 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 38 of 60[32m SUCCESS[39m (0 secs / 0.248 secs)
+[1A[2K[31mChrome Headless 137.0.0.0 (Windows 10) TaskPageComponent should delete task successfully FAILED[39m
+	Expected spy TaskService.deleteTask to have been called with:
+	  [ '1' ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/task-page/task-page.component.spec.ts:79:36)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Task deleted successfully!', 'Close', Object({ duration: 3000 }) ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/task-page/task-page.component.spec.ts:80:27)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+	Expected spy TaskService.getAllTasks to have been called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/task-page/task-page.component.spec.ts:81:37)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+Chrome Headless 137.0.0.0 (Windows 10): Executed 39 of 60[31m (1 FAILED)[39m (0 secs / 0.256 secs)
+[1A[2K[31mChrome Headless 137.0.0.0 (Windows 10) TaskPageComponent should handle error when deleting task FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Error deleting task!', 'Close', Object({ duration: 3000 }) ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/task-page/task-page.component.spec.ts:89:27)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+Chrome Headless 137.0.0.0 (Windows 10): Executed 40 of 60[31m (2 FAILED)[39m (0 secs / 0.262 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 41 of 60[31m (2 FAILED)[39m (0 secs / 0.268 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 42 of 60[31m (2 FAILED)[39m (0 secs / 0.274 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 43 of 60[31m (2 FAILED)[39m (0 secs / 0.28 secs)
+[1A[2K[31mChrome Headless 137.0.0.0 (Windows 10) TaskPageComponent should fetch tasks on init FAILED[39m
+	Expected spy TaskService.getAllTasks to have been called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/task-page/task-page.component.spec.ts:59:37)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+	Expected $.length = 0 to equal 2.
+	Expected $[0] = undefined to equal Object({ id: '1', title: 'Task 1', description: 'Description 1', date: '2025-01-01' }).
+	Expected $[1] = undefined to equal Object({ id: '2', title: 'Task 2', description: 'Description 2', date: '2025-01-02' }).
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/task-page/task-page.component.spec.ts:60:29)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+	Expected true to be false.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/task-page/task-page.component.spec.ts:61:33)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+Chrome Headless 137.0.0.0 (Windows 10): Executed 44 of 60[31m (3 FAILED)[39m (0 secs / 0.286 secs)
+[1A[2K[31mChrome Headless 137.0.0.0 (Windows 10) TaskPageComponent should handle error when fetching tasks FAILED[39m
+	Expected true to be false.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/task-page/task-page.component.spec.ts:69:33)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+Chrome Headless 137.0.0.0 (Windows 10): Executed 45 of 60[31m (4 FAILED)[39m (0 secs / 0.291 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 46 of 60[31m (4 FAILED)[39m (0 secs / 0.359 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 47 of 60[31m (4 FAILED)[39m (0 secs / 0.361 secs)
+[1A[2K[31mChrome Headless 137.0.0.0 (Windows 10) jwtInterceptor should add Authorization header when token exists FAILED[39m
+	Expected spy HttpHandler.handle to have been called with:
+	  [ <jasmine.objectContaining(Object({ headers: <jasmine.objectContaining(Object({ Authorization: 'Bearer test-token' }))> }))> ]
+	but actual calls were:
+	  [ HttpRequest({ url: '/test', body: null, headers: HttpHeaders({ headers: Map(  ), normalizedNames: Map(  ), lazyInit: HttpHeaders({ headers: Map(  ), normalizedNames: Map(  ), lazyInit: undefined, lazyUpdate: null }), lazyUpdate: [ Object({ name: 'Authorization', value: 'Bearer test-token', op: 's' }) ] }), context: HttpContext({ map: Map(  ) }), reportProgress: false, withCredentials: false, responseType: 'json', method: 'GET', params: , urlWithParams: '/test', transferCache: undefined }) ].
+	
+	Call 0:
+	  Expected $[0].headers.Authorization = undefined to equal 'Bearer test-token'.
+	Error: Expected spy HttpHandler.handle to have been called with:
+	  [ <jasmine.objectContaining(Object({ headers: <jasmine.objectContaining(Object({ Authorization: 'Bearer test-token' }))> }))> ]
+	but actual calls were:
+	  [ HttpRequest({ url: '/test', body: null, headers: HttpHeaders({ headers: Map(  ), normalizedNames: Map(  ), lazyInit: HttpHeaders({ headers: Map(  ), normalizedNames: Map(  ), lazyInit: undefined, lazyUpdate: null }), lazyUpdate: [ Object({ name: 'Authorization', value: 'Bearer test-token', op: 's' }) ] }), context: HttpContext({ map: Map(  ) }), reportProgress: false, withCredentials: false, responseType: 'json', method: 'GET', params: , urlWithParams: '/test', transferCache: undefined }) ].
+	Call 0:
+	  Expected $[0].headers.Authorization = undefined to equal 'Bearer test-token'.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/interceptors/jwt.interceptor.spec.ts:33:29)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+Chrome Headless 137.0.0.0 (Windows 10): Executed 48 of 60[31m (5 FAILED)[39m (0 secs / 0.366 secs)
+[1A[2KLOG: [36mError: Storage error
+Error: Storage error
+    at SpyStrategy.throwError (http://localhost:9876/base/node_modules/karma-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.js?86d98e11f43f2c8cfac9fb4806ed6c0aced74cbe:9361:45)
+    at UserContext.apply (http://localhost:9876/_karma_webpack_/webpack:/src/app/interceptors/jwt.interceptor.spec.ts:52:33)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:398:28)
+    at ProxyZoneSpec.onInvoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:397:34)
+    at ZoneImpl.run (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:113:43)
+    at runInTestZone (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+    at UserContext.<anonymous> (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+    at ZoneQueueRunner.attempt (http://localhost:9876/base/node_modules/karma-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.js?86d98e11f43f2c8cfac9fb4806ed6c0aced74cbe:7632:40)
+    at ZoneQueueRunner.QueueRunner.run (http://localhost:9876/base/node_modules/karma-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.js?86d98e11f43f2c8cfac9fb4806ed6c0aced74cbe:7670:27)[39m
+Chrome Headless 137.0.0.0 (Windows 10): Executed 48 of 60[31m (5 FAILED)[39m (0 secs / 0.366 secs)
+LOG: Error: Storage error
+Error: Storage error
+    at SpyStrategy.throwError (http://localhost:9876/base/node_modules/karma-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.js?86d98e11f43f2c8cfac9fb4806ed6c0aced74cbe:9361:45)
+    at UserContext.apply (http://localhost:9876/_karma_webpack_/webpack:/src/app/interceptors/jwt.interceptor.spec.ts:52:33)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:398:28)
+    at ProxyZoneSpec.onInvoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+    at _ZoneDelegate.invoke (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:397:34)
+    at ZoneImpl.run (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone.js:113:43)
+    at runInTestZone (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:216:38)
+    at UserContext.<anonymous> (http://localhost:9876/_karma_webpack_/webpack:/node_modules/zone.js/fesm2015/zone-testing.js:234:32)
+    at ZoneQueueRunner.attempt (http://localhost:9876/base/node_modules/karma-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.js?86d98e11f43f2c8cfac9fb4806ed6c0aced74cbe:7632:40)
+    at ZoneQueueRunner.QueueRunner.run (http://localhost:9876/base/node_modules/karma-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.js?86d98e11f43f2c8cfac9fb4806ed6c0aced74cbe:7670:27)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 49 of 60[31m (5 FAILED)[39m (0 secs / 0.37 secs)
+[1A[2K[31mChrome Headless 137.0.0.0 (Windows 10) LoginPageComponent should login successfully with valid credentials FAILED[39m
+	Expected spy AuthService.login to have been called with:
+	  [ Object({ username: 'testuser', password: 'testpass' }) ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/login-page/login-page.component.spec.ts:74:31)
+	    at UserContext.apply (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	Expected spy StorageService.setToken to have been called with:
+	  [ 'mock-token' ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/login-page/login-page.component.spec.ts:75:37)
+	    at UserContext.apply (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	Expected spy StorageService.setUserId to have been called with:
+	  [ 123 ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/login-page/login-page.component.spec.ts:76:38)
+	    at UserContext.apply (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	Expected spy Router.navigate to have been called with:
+	  [ [ '/tasks' ] ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/login-page/login-page.component.spec.ts:77:29)
+	    at UserContext.apply (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 137.0.0.0 (Windows 10): Executed 50 of 60[31m (6 FAILED)[39m (0 secs / 0.403 secs)
+[1A[2K[31mChrome Headless 137.0.0.0 (Windows 10) LoginPageComponent should show error message for invalid form FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Please fill in all required fields!', 'Close', Object({ duration: 3000 }) ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/login-page/login-page.component.spec.ts:91:27)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:397:34)
+Chrome Headless 137.0.0.0 (Windows 10): Executed 51 of 60[31m (7 FAILED)[39m (0 secs / 0.431 secs)
+[1A[2K[31mChrome Headless 137.0.0.0 (Windows 10) LoginPageComponent should handle 401 login error FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Incorrect password!', 'Close', Object({ duration: 3000 }) ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/login-page/login-page.component.spec.ts:107:27)
+	    at UserContext.apply (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 137.0.0.0 (Windows 10): Executed 52 of 60[31m (8 FAILED)[39m (0 secs / 0.451 secs)
+[1A[2K[31mChrome Headless 137.0.0.0 (Windows 10) LoginPageComponent should handle general login error FAILED[39m
+	Expected spy MatSnackBar.open to have been called with:
+	  [ 'Error logging in!', 'Close', Object({ duration: 3000 }) ]
+	but it was never called.
+	    at <Jasmine>
+	    at UserContext.apply (src/app/pages/login-page/login-page.component.spec.ts:121:27)
+	    at UserContext.apply (node_modules/zone.js/fesm2015/zone-testing.js:1715:26)
+	    at _ZoneDelegate.invoke (node_modules/zone.js/fesm2015/zone.js:398:28)
+	    at ProxyZoneSpec.onInvoke (node_modules/zone.js/fesm2015/zone-testing.js:2132:39)
+Chrome Headless 137.0.0.0 (Windows 10): Executed 53 of 60[31m (9 FAILED)[39m (0 secs / 0.472 secs)
+[1A[2KLOG: [36m'Redirecting to account creation page'[39m
+Chrome Headless 137.0.0.0 (Windows 10): Executed 53 of 60[31m (9 FAILED)[39m (0 secs / 0.472 secs)
+LOG: 'Redirecting to account creation page'
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 54 of 60[31m (9 FAILED)[39m (0 secs / 0.486 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 55 of 60[31m (9 FAILED)[39m (0 secs / 0.501 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 56 of 60[31m (9 FAILED)[39m (0 secs / 0.518 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 57 of 60[31m (9 FAILED)[39m (0 secs / 0.565 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 58 of 60[31m (9 FAILED)[39m (0 secs / 0.568 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 59 of 60[31m (9 FAILED)[39m (0 secs / 0.57 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 60 of 60[31m (9 FAILED)[39m (0 secs / 0.573 secs)
+[1A[2KChrome Headless 137.0.0.0 (Windows 10): Executed 60 of 60[31m (9 FAILED)[39m (0.651 secs / 0.573 secs)
+[31mTOTAL: 9 FAILED, 51 SUCCESS[39m
+✔ Browser application bundle generation complete.
+✔ Browser application bundle generation complete.
