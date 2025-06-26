@@ -4,13 +4,7 @@ yarn-debug.log*
 yarn-error.log*
 README.md
 .env
-.nyc_output
 coverage
-.coverage
-dist
-.angular/cache
-e2e
+logs
 .vscode
-.ideanode_modules
-dist
-npm-debug.log
+.idea
