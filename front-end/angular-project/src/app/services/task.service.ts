@@ -20,10 +20,10 @@ export class TaskService extends BaseService<any> {
   }
 
   createTask(task: { title: string; description: string; date?: string }) {
-    return this.create('task', task);
+    return this.create('tasks', task);
   }
 
   updateTask(taskId: string, task: { title: string; description: string; date?: string }) {
-    return this.update('task', taskId, task);
+    return this.update('tasks', taskId, task);
   }
 }

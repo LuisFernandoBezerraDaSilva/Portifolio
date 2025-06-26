@@ -54,7 +54,7 @@ describe('TaskService', () => {
       expect(task).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/task`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/tasks`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(newTask);
     req.flush(mockResponse);
@@ -69,7 +69,7 @@ describe('TaskService', () => {
       expect(task).toEqual(mockResponse);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/task/${taskId}`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/tasks/${taskId}`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body).toEqual(updatedTask);
     req.flush(mockResponse);
