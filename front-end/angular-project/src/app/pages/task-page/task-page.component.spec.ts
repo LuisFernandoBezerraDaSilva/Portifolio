@@ -1,66 +1,87 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { of, throwError } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { TaskPageComponent } from './task-page.component';
-import { TaskService } from '../../services/task.service';
+import * as TaskActions from '../../store/task/task.actions';
+import * as TaskSelectors from '../../store/task/task.selectors';
+import { Task } from '../../models/task.model';
 
 describe('TaskPageComponent', () => {
   let component: TaskPageComponent;
   let fixture: ComponentFixture<TaskPageComponent>;
   let router: jasmine.SpyObj<Router>;
-  let taskService: jasmine.SpyObj<TaskService>;
+  let store: MockStore;
   let snackBar: jasmine.SpyObj<MatSnackBar>;
 
-  const mockTasks = [
-    { id: '1', title: 'Task 1', description: 'Description 1', date: '2025-01-01' },
-    { id: '2', title: 'Task 2', description: 'Description 2', date: '2025-01-02' }
+  const mockTasks: Task[] = [
+    { id: '1', title: 'Task 1', description: 'Description 1', date: '2025-01-01', status: 'A_FAZER', userId: 'user1' },
+    { id: '2', title: 'Task 2', description: 'Description 2', date: '2025-01-02', status: 'CONCLUIDO', userId: 'user1' }
   ];
+
+  const initialState = {
+    auth: {
+      user: null,
+      isAuthenticated: false,
+      token: null,
+      isLoading: false,
+      error: null
+    },
+    task: {
+      tasks: [],
+      selectedTask: null,
+      total: 0,
+      page: 1,
+      totalPages: 1,
+      isLoading: false,
+      error: null
+    }
+  };
 
   beforeEach(async () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-    const taskServiceSpy = jasmine.createSpyObj('TaskService', ['getAllTasks', 'deleteTask']);
     const snackBarSpy = jasmine.createSpyObj('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
-      imports: [TaskPageComponent, BrowserAnimationsModule, HttpClientTestingModule]
+      imports: [TaskPageComponent, BrowserAnimationsModule],
+      providers: [
+        provideMockStore({ initialState }),
+        { provide: Router, useValue: routerSpy },
+        { provide: MatSnackBar, useValue: snackBarSpy }
+      ]
     })
-    .overrideProvider(TaskService, { useValue: taskServiceSpy })
-    .overrideProvider(Router, { useValue: routerSpy })
-    .overrideProvider(MatSnackBar, { useValue: snackBarSpy })
     .compileComponents();
 
+    store = TestBed.inject(Store) as MockStore;
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    snackBar = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
+    
+    // Set up initial selectors
+    store.overrideSelector(TaskSelectors.selectTasks, []);
+    store.overrideSelector(TaskSelectors.selectTasksLoading, false);
+    store.overrideSelector(TaskSelectors.selectTasksError, null);
+    
     fixture = TestBed.createComponent(TaskPageComponent);
     component = fixture.componentInstance;
-    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-    taskService = TestBed.inject(TaskService) as jasmine.SpyObj<TaskService>;
-    snackBar = TestBed.inject(MatSnackBar) as jasmine.SpyObj<MatSnackBar>;
+    
+    spyOn(store, 'dispatch');
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should initialize with default values', () => {
-    expect(component.dataSource.data).toEqual([]);
-    expect(component.displayedColumns).toEqual(['date', 'title', 'description', 'actions']);
-    expect(component.isLoading).toBe(true);
+  it('should have NgRx observables defined', () => {
+    expect(component.tasks$).toBeDefined();
+    expect(component.isLoading$).toBeDefined();
+    expect(component.error$).toBeDefined();
   });
 
-  it('should have empty dataSource initially', () => {
-    expect(component.dataSource.data.length).toBe(0);
-  });
-
-  it('should have correct component properties', () => {
-    expect(component.displayedColumns).toBeDefined();
-    expect(component.dataSource).toBeDefined();
-    expect(component.isLoading).toBeDefined();
-  });
-
-  it('should be defined', () => {
-    expect(component).toBeDefined();
+  it('should dispatch loadTasks action on init', () => {
+    component.ngOnInit();
+    expect(store.dispatch).toHaveBeenCalledWith(TaskActions.loadTasks());
   });
 
   it('should navigate to create new task', () => {
@@ -83,44 +104,8 @@ describe('TaskPageComponent', () => {
     });
   });
 
-  it('should fetch tasks on init', () => {
-    taskService.getAllTasks.and.returnValue(of(mockTasks));
-    
-    component.ngOnInit();
-
-    expect(taskService.getAllTasks).toHaveBeenCalled();
-    expect(component.dataSource.data).toEqual(mockTasks);
-    expect(component.isLoading).toBe(false);
-  });
-
-  it('should handle error when fetching tasks', () => {
-    taskService.getAllTasks.and.returnValue(throwError(() => new Error('Server error')));
-    
-    component.ngOnInit();
-
-    expect(component.isLoading).toBe(false);
-    expect(component.dataSource.data).toEqual([]);
-  });
-
-  it('should delete task successfully', fakeAsync(() => {
-    taskService.deleteTask.and.returnValue(of(void 0));
-    taskService.getAllTasks.and.returnValue(of(mockTasks));
-    
+  it('should dispatch deleteTask action when deleteTask is called', () => {
     component.deleteTask('1');
-    tick(); // Wait for async operations to complete
-    flush(); // Ensure all async operations are completed
-
-    expect(taskService.deleteTask).toHaveBeenCalledWith('1');
-    expect(snackBar.open).toHaveBeenCalledWith('Task deleted successfully!', 'Close', { duration: 3000 });
-    expect(taskService.getAllTasks).toHaveBeenCalled();
-  }));
-
-  it('should handle error when deleting task', fakeAsync(() => {
-    taskService.deleteTask.and.returnValue(throwError(() => new Error('Delete error')));
-    
-    component.deleteTask('1');
-    tick(); // Wait for async operations to complete
-
-    expect(snackBar.open).toHaveBeenCalledWith('Error deleting task!', 'Close', { duration: 3000 });
-  }));
+    expect(store.dispatch).toHaveBeenCalledWith(TaskActions.deleteTask({ id: '1' }));
+  });
 });

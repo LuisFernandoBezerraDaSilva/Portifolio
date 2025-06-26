@@ -24,14 +24,14 @@ describe('StorageService', () => {
     const token = 'test-token';
     service.setToken(token);
     expect(service.getToken()).toBe(token);
-    expect(localStorage.setItem).toHaveBeenCalledWith('authToken', token);
+    expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', token);
   });
 
   it('should clear token', () => {
     service.setToken('test-token');
     service.clearToken();
     expect(service.getToken()).toBeNull();
-    expect(localStorage.removeItem).toHaveBeenCalledWith('authToken');
+    expect(localStorage.removeItem).toHaveBeenCalledWith('accessToken');
   });
 
   it('should clear all data', () => {
