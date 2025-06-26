@@ -71,6 +71,26 @@ This repository is organized into multiple independent projects:
    - Next.js App: `http://localhost:3000`
    - PostgreSQL Database: `localhost:5432`
 
+### ⚡ Performance Notes
+
+**⏱️ Build Time**: The initial Docker build process can take up to **5 minutes** due to
+- Building two front-ends at the same time
+- Install all npm dependencies
+- Compile TypeScript and build production assets
+
+**🚀 Optimization Tips**:
+- **Subsequent builds** are faster due to Docker layer caching
+- **Use `.dockerignore`** to exclude unnecessary files from build context
+- **Consider individual setup** for development (faster rebuilds)
+- **Be patient on first run** - grab a coffee! ☕
+
+```bash
+# For faster development, consider running individually:
+cd back-end/node-project && npm run dev
+cd front-end/angular-project && npm start
+cd front-end/next-project && npm run dev
+```
+
 ### 🔧 Individual Project Setup
 
 #### Backend Setup
