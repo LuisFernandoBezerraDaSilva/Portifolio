@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: S3nh@C0mpl3x@
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DB_USER: postgres
+      DB_PASS: S3nh@C0mpl3x@
+      DB_HOST: localhost
+      DB_PORT: 5432
+      ADMIN_DB: postgres
+      DATABASE_URL: "postgresql://postgres:S3nh@C0mpl3x@@localhost:5432/testdb?schema=public"
+      PORT: 3300
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies (back-end)
+        run: |
+          cd back-end/node-project
+          npm ci
+
+      - name: Install dependencies (front-end)
+        run: |
+          cd front-end/next-project
+          npm ci
+
+      - name: Run Prisma migrations
+        run: |
+          cd back-end/node-project
+          npx prisma migrate deploy
+
+      - name: Run back-end tests
+        run: |
+          cd back-end/node-project
+          npm test
+
+      - name: Run lint (front-end)
+        run: |
+          cd front-end/next-project
+          npm run lint
+
+      - name: Build front-end
+        run: |
+          cd front-end/next-project
+          npm run build
