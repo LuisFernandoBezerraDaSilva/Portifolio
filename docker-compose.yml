@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   db:
     image: postgres:17
@@ -20,24 +18,36 @@ services:
 
   backend:
     build:
-      context: ./node-project
+      context: ./back-end/node-project
       dockerfile: dockerfile
     ports:
       - "3300:3300"
     environment:
       DATABASE_URL: "postgresql://user:password@db:5432/database"
     volumes:
-      - ./node-project:/app
+      - ./back-end/node-project:/app
       - /app/node_modules
     depends_on:
       db:
         condition: service_healthy
     restart: always
 
-  frontend:
+  angular-frontend:
     build:
-      context: ./next-project
-      dockerfile: Dockerfile
+      context: ./front-end/angular-project
+      dockerfile: dockerfile
+    ports:
+      - "4200:4200"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    restart: always
+
+  nextjs-frontend:
+    build:
+      context: ./front-end/next-project
+      dockerfile: dockerfile
     ports:
       - "3000:3000"
     environment:

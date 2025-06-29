@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Token Injector</title>
+</head>
+<body>
+    <h1>Token Injector for Angular</h1>
+    <button onclick="injectToken()">Inject Token</button>
+    <button onclick="testTasks()">Test Tasks</button>
+    <button onclick="clearToken()">Clear Token</button>
+    <div id="result"></div>
+
+    <script>
+        function injectToken() {
+            const token = 'a4844b5a-cc8b-4ea9-b1a9-0024d91199ee';
+            localStorage.setItem('accessToken', token);
+            document.getElementById('result').innerHTML = `<p>✅ Token injected: ${token}</p>`;
+            console.log('Token injected:', token);
+        }
+
+        function clearToken() {
+            localStorage.removeItem('accessToken');
+            document.getElementById('result').innerHTML = `<p>🗑️ Token cleared</p>`;
+            console.log('Token cleared');
+        }
+
+        async function testTasks() {
+            const token = localStorage.getItem('accessToken');
+            if (!token) {
+                document.getElementById('result').innerHTML = `<p>❌ No token found</p>`;
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3300/tasks', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').innerHTML = `
+                    <h3>Tasks Response:</h3>
+                    <p>Status: ${response.status}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                console.log('Tasks response:', data);
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p>❌ Error: ${error.message}</p>`;
+                console.error('Error:', error);
+            }
+        }
+
+        // Auto inject token on load
+        window.onload = function() {
+            injectToken();
+        };
+    </script>
+</body>
+</html>
